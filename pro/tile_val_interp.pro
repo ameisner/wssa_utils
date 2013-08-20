@@ -15,7 +15,8 @@
 ;
 ; OPTIONAL INPUTS:
 ;   tpath - path to location of WSSA tiles
-;   exten - fits extension, default to exten=0, not yet implemented
+;   exten - fits extension, default to exten=0, now implemented for
+;           single-element exten input
 ;
 ; KEYWORDS:
 ;   large - not yet implemented
@@ -37,17 +38,19 @@
 function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath
 
   if ~keyword_set(exten) then exten = 0
-  if ~keyword_set(tpath) then $ 
-      tpath = '/raid14/data/akari/FITS/Release2.0/WideS'
+; ----- make sure exten is an integer, do some checks on exten
+  exten = string_to_ext(exten)
+
+  if ~keyword_set(tpath) then tpath = '/n/wise/ameisner/tile-allsky-ref4'
   par = tile_par_struc(large=large)
 
   nval = n_elements(tnum)
   sind = sort(tnum)
   bdy = uniq(tnum[sind])
-; ---- number of unique tiles
+; ----- number of unique tiles
   nu = n_elements(bdy)
-  fname = concat_dir(tpath, string(tnum[sind[bdy]], format='(I03)') + $ 
-      '_WideS.fits')
+  fname = concat_dir(tpath, $ 
+      'wise_' + string(tnum[sind[bdy]], format='(I03)') + '.fits')
 
   vals = dblarr(nval) ; can debate float vs. double here later
   for i=0, nu-1 do begin
@@ -64,8 +67,13 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath
       ymax = (ceil(max(y)) < (par.pix-1))
 
       fxread, fname[i], subim, _, xoffs, xmax, yoffs, ymax, exten=exten
-; ---- generalize for bit-masks later
-      vals[sind[indl:indu]] = interpolate(subim, xx-xoffs, yy-yoffs)
+
+; ----- for bit-masks, round coordinates and quote value, interpolate otherwise
+;       clean up conversion to appropriate integer data type later
+      if par.ismsk[exten] then $ 
+          vals[sind[indl:indu]] = subim[round(xx)-xoffs, round(yy)-yoffs] $
+      else $
+          vals[sind[indl:indu]] = interpolate(subim, xx-xoffs, yy-yoffs)
   endfor
 
   return, vals

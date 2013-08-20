@@ -9,8 +9,8 @@
 ;   vals = w3_getval(ra, dec)
 ;
 ; INPUTS:
-;   ra - input list of RA values
-;   dec - input list of DEC values
+;   ra - input list of RA values, assumed J2000
+;   dec - input list of DEC values, assumed J2000
 ;
 ; OPTIONAL INPUTS:
 ;   

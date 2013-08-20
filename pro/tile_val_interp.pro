@@ -57,11 +57,11 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath
           ' Reading: ', fname[i],', '+strtrim(string(indu-indl+1),2)+' samples'
       xx = x[sind[indl:indu]]
       yy = y[sind[indl:indu]]
-      xoffs = (round(min(x))-1) > 0
-      yoffs = (round(min(y))-1) > 0
+      xoffs = (floor(min(x)) > 0)
+      yoffs = (floor(min(y)) > 0)
 
-      xmax = (round(max(x))+1) < (par.pix-1)
-      ymax = (round(max(y))+1) < (par.pix-1)
+      xmax = (ceil(max(x)) < (par.pix-1))
+      ymax = (ceil(max(y)) < (par.pix-1))
 
       fxread, fname[i], subim, _, xoffs, xmax, yoffs, ymax, exten=exten
 ; ---- generalize for bit-masks later

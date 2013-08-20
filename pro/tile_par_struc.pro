@@ -8,8 +8,11 @@
 ; CALLING SEQUENCE:
 ;   par = tile_par_struc(large=, w4=)
 ;
+; OPTIONAL INPUTS:
+;   release - release string, should be either 'dev' or '1.0'
+;
 ; KEYWORDS:
-;   large - set for large version of tiles (8k x 8k), normal size is
+;   large - set for large version of tiles (8k x 8k), default size is
 ;           3k x 3k
 ;   w4 - set for W4 (default W3), not yet implemented
 ;
@@ -25,8 +28,9 @@
 ; REVISION HISTORY:
 ;   2013-Aug-15 - Aaron Meisner
 ;----------------------------------------------------------------------
-function tile_par_struc, large=large, w4=w4
+function tile_par_struc, large=large, w4=w4, release=release
 
+  if ~keyword_set(release) then release = 'dev'
 ; ----- tile sidelength, degrees
   sidelen = 12.5d
 ; ----- tile sidelength, pixels
@@ -37,12 +41,37 @@ function tile_par_struc, large=large, w4=w4
   crpix = keyword_set(large) ? 3999.5d : 1499.5d
 ; ----- name of index file with tile centers, etc.
   indexfile = '$WISE_DATA/wisetile-index-allsky.fits'
+; ----- extension names, clean this up later, for now useful to see list
+  if (release EQ 'dev') then $ 
+      extens = ['clean', $ 
+                'dirt',  $ 
+                'cov',   $ 
+                'sfd',   $
+                'min',   $ 
+                'max',   $
+                'amsk',  $ 
+                'omsk',  $ 
+                'art'     ] $
+  else $
+      extens = ['clean', $ 
+                'dirt',  $ 
+                'cov',   $ 
+                'min',   $ 
+                'max',   $
+                'amsk',  $ 
+                'omsk',  $ 
+                'art'     ]
+; ----- boolean indicating whether each extension should be treated as a
+;       bit-mask, 0=not mask, 1=mask (what about coverage??)
+  ismsk = strpos(extens, 'msk') GT 0
 
   par = { sidelen   : sidelen,   $ 
           pix       : pix,       $
           crpix     : crpix,     $
           pscl      : pscl,      $
-          indexfile : indexfile   }
+          indexfile : indexfile, $
+          extens    : extens,    $
+          ismsk     : ismsk       }
 
   return, par
 

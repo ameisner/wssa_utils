@@ -17,6 +17,7 @@
 ;   tpath - path to location of WSSA tiles
 ;   exten - fits extension, default to exten=0, now implemented for
 ;           single-element exten input
+;   release - for now 'dev' or '1.0', 'dev' is default
 ;
 ; KEYWORDS:
 ;   large - not yet implemented
@@ -35,11 +36,12 @@
 ; REVISION HISTORY:
 ;   2013-Aug-18 - Aaron Meisner
 ;----------------------------------------------------------------------
-function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath
+function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $ 
+                          release=release
 
   if ~keyword_set(exten) then exten = 0
 ; ----- make sure exten is an integer, do some checks on exten
-  exten = string_to_ext(exten)
+  exten = string_to_ext(exten, release=release)
 
   if ~keyword_set(tpath) then tpath = '/n/wise/ameisner/tile-allsky-ref4'
   par = tile_par_struc(large=large)

@@ -15,18 +15,19 @@
 ; OPTIONAL INPUTS:
 ;   exten - extension, either as an integer or string, acceptable
 ;           values depend on release, but for release='dev':
-;                0: clean
-;                1: dirt
-;                2: cov
-;                3: sfd
-;                4: min
-;                5: max
-;                6: amsk
-;                7: omsk
-;                8: art
+;                0: 'clean'
+;                1: 'dirt'
+;                2: 'cov'
+;                3: 'sfd'
+;                4: 'min'
+;                5: 'max'
+;                6: 'amsk'
+;                7: 'omsk'
+;                8: 'art'
 ;
 ; KEYWORDS:
-;   
+;   tilepath - directory containing WSSA tile fits files
+;
 ; OUTPUTS:
 ;   vals - values at (ra, dec) interpolated off of WSSA tiles
 ;
@@ -39,10 +40,10 @@
 ; REVISION HISTORY:
 ;   2013-Aug-19 - Aaron Meisner
 ;----------------------------------------------------------------------
-function w3_getval, ra, dec, exten=exten
+function w3_getval, ra, dec, exten=exten, tilepath=tilepath
 
   coord_to_tile, ra, dec, tnum, x=x, y=y
-  vals = tile_val_interp(tnum, x, y, exten=exten)
+  vals = tile_val_interp(tnum, x, y, exten=exten, tpath=tilepath)
 
 ; ---- need to properly deal with un-flattening of multi-dimensional input
 

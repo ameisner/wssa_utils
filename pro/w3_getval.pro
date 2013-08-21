@@ -27,6 +27,7 @@
 ;
 ; KEYWORDS:
 ;   tilepath - directory containing WSSA tile fits files
+;   release  - for now 'dev' or '1.0', 'dev' is default
 ;
 ; OUTPUTS:
 ;   vals - values at (ra, dec) interpolated off of WSSA tiles
@@ -40,12 +41,18 @@
 ; REVISION HISTORY:
 ;   2013-Aug-19 - Aaron Meisner
 ;----------------------------------------------------------------------
-function w3_getval, ra, dec, exten=exten, tilepath=tilepath
+function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release
+
+  if ~keyword_set(exten) then exten = 0
+  exten = string_to_ext(exten, release=release)
+; ----- don't try to interpolate off of SFD extension
+  if exten EQ string_to_ext('sfd') then return, -1
 
   coord_to_tile, ra, dec, tnum, x=x, y=y
-  vals = tile_val_interp(tnum, x, y, exten=exten, tpath=tilepath)
+  vals = tile_val_interp(tnum, x, y, exten=exten, tpath=tilepath, $ 
+      release=release)
 
-; ---- need to properly deal with un-flattening of multi-dimensional input
+  if n_elements(vals) GT 1 then vals = reform(vals, size(ra, /dim))
 
   return, vals
 

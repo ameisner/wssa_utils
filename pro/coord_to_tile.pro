@@ -39,8 +39,9 @@ pro coord_to_tile, ra, dec, tnum, x=x, y=y, large=large
   COMMON PIXTILE, plist, tlist, nside
 
 ; ----- convert to HEALPix
-  ang2pix_ring, nside, (90.0-dec)/!radeg, ra/!radeg, pix
+  ang2pix_ring, nside, (90.d - dec)/!radeg, ra/!radeg, pix
   tnum = tlist[pix]
+  delvarx, pix ; don't waste RAM
 
 ; ----- if requested, convert to (x,y) within tile
   if arg_present(x) then begin

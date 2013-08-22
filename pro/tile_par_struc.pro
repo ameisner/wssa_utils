@@ -66,6 +66,8 @@ function tile_par_struc, large=large, w4=w4, release=release
   ismsk = strpos(extens, 'msk') GT 0
 ; ----- number of tiles, don't want random 430's all over my code
   ntile = 430
+; ----- default tile path
+  tpath = '/fink1/ameisner/tile-planck-zp'
 
   par = { sidelen   : sidelen,   $ 
           pix       : pix,       $
@@ -74,7 +76,8 @@ function tile_par_struc, large=large, w4=w4, release=release
           indexfile : indexfile, $
           extens    : extens,    $
           ismsk     : ismsk,     $
-          ntile     : ntile       }
+          ntile     : ntile,     $
+          tpath     : tpath       }
 
   return, par
 

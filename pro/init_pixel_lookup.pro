@@ -23,7 +23,6 @@ pro init_pixel_lookup, read=read
 
   COMMON PIXTILE, pix, tile, nside
   if n_elements(tile) EQ 0 then begin
-; ----- eventually read from a file instead of computing on the fly
       nside = 64
       if keyword_set(read) then begin
           str = mrdfits('$WISE_DATA/pixel_lookup.fits', 1)

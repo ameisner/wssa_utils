@@ -43,8 +43,8 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
 ; ----- make sure exten is an integer, do some checks on exten
   exten = string_to_ext(exten, release=release)
 
-  if ~keyword_set(tpath) then tpath = '/n/wise/ameisner/tile-allsky-ref4'
   par = tile_par_struc(large=large)
+  if ~keyword_set(tpath) then tpath = par.tpath
 
   nval = n_elements(tnum)
   sind = sort(tnum)

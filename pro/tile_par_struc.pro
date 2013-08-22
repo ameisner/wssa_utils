@@ -64,6 +64,8 @@ function tile_par_struc, large=large, w4=w4, release=release
 ; ----- boolean indicating whether each extension should be treated as a
 ;       bit-mask, 0=not mask, 1=mask (what about coverage??)
   ismsk = strpos(extens, 'msk') GT 0
+; ----- number of tiles, don't want random 430's all over my code
+  ntile = 430
 
   par = { sidelen   : sidelen,   $ 
           pix       : pix,       $
@@ -71,7 +73,8 @@ function tile_par_struc, large=large, w4=w4, release=release
           pscl      : pscl,      $
           indexfile : indexfile, $
           extens    : extens,    $
-          ismsk     : ismsk       }
+          ismsk     : ismsk,     $
+          ntile     : ntile       }
 
   return, par
 

@@ -62,11 +62,11 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
           ' Reading: ', fname[i],', '+strtrim(string(indu-indl+1),2)+' samples'
       xx = x[sind[indl:indu]]
       yy = y[sind[indl:indu]]
-      xoffs = (floor(min(x)) > 0)
-      yoffs = (floor(min(y)) > 0)
+      xoffs = (floor(min(xx)) > 0)
+      yoffs = (floor(min(yy)) > 0)
 
-      xmax = (ceil(max(x)) < (par.pix-1))
-      ymax = (ceil(max(y)) < (par.pix-1))
+      xmax = (ceil(max(xx)) < (par.pix-1))
+      ymax = (ceil(max(yy)) < (par.pix-1))
 
       fxread, fname[i], subim, _, xoffs, xmax, yoffs, ymax, exten=exten
 

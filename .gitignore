@@ -1,5 +1,7 @@
 ### any autosaves
 pro/*~
 *~
+python/*~
+
 ### compiled Python modules
 python/*.pyc

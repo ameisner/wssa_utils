@@ -9,19 +9,19 @@ com_pix_tile = {'NSIDE': 64}
 com_tiles    = {}
 radeg = 180./numpy.pi
 
-def tile_par_struc(large=0, w4=0, release='dev'):
-# ----- tile sidelength, degrees
+def tile_par_struc(large=0, w4=0, release='1.0'):
+    # tile sidelength, degrees
     sidelen = 12.5 # python float = 32 bits, right?
-# ----- tile sidelength, pixels
+    # tile sidelength, pixels
     pix = (8000. if large else 3000.)
-# ----- pixel scale, asec/pixel
+    # pixel scale, asec/pixel
     pscl = (5.625 if large else 15.)
-# ----- central coordinate, lower left = (0,0)
+    # central coordinate, lower left = (0,0)
     crpix = (3999.5 if large else 1499.5)
-# ----- name of index file with tile centers, etc.
+    # name of index file with tile centers, etc.
     indexfile = os.path.join(os.environ['WISE_DATA'],
                              'wisetile-index-allsky.fits')
-# ----- extension names, clean this up later, for now useful to see list
+    # extension names, clean this up later, for now useful to see list
     if release == 'dev':
         extens = {'clean' : 0,
                   'dirt'  : 1,
@@ -41,14 +41,14 @@ def tile_par_struc(large=0, w4=0, release='dev'):
                   'amsk'  : 5,
                   'omsk'  : 6,
                   'art'   : 7 }
-# ----- boolean indicating whether each extension should be treated as a
-#       bit-mask
+    # boolean indicating whether each extension should be treated as a bit-mask
     ismsk = ([0,0,0,0,0,0,1,1,0] if (release == 'dev') else [0,0,0,0,0,1,1,])
-# ----- number of tiles, don't want random 430's all over my code
+    # number of tiles, don't want random 430's all over my code
     ntile = 430
-# ----- default tile path
+    # default tile path
     tpath = '/fink1/ameisner/tile-combine-8k' if large else \
             '/fink1/ameisner/tile-planck-zp'
+    # conversion from factor from W3 DN to MJy/sr
     calfac = 0.0163402
 
     par = {'sidelen'   : sidelen,
@@ -75,7 +75,7 @@ def issa_proj_gnom(ra, dec, ra0, dec0, scale):
     return x, y
 
 def coord_to_tile(ra, dec, large=0):
-    #assume ra,dec in degrees
+    # assume ra,dec in degrees
     pix = healpy.ang2pix(com_pix_tile['NSIDE'], (90.-dec)/radeg, ra/radeg)
     tlist = (com_pix_tile['TILE'])[pix]
     del pix
@@ -88,8 +88,8 @@ def coord_to_tile(ra, dec, large=0):
     y += par['crpix']
     return tlist, x, y
 
-def tile_interp_val(tnum, x, y, large=0, exten=0, release='dev', tpath=''):
-    # what to do about tpath as keyword
+def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
+    
     par = tile_par_struc(large=large, release=release)
     if isinstance(exten, str):
         exten = (par['extens'])[exten]
@@ -100,7 +100,7 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='dev', tpath=''):
     tu, bdy = numpy.unique(tnum[sind], return_index=True)
     nu = len(tu.flat)
 
-    fname = '/n' + os.path.join(tpath, (com_tiles['FNAME'])[tnum[sind[bdy]]-1])
+    fname = os.path.join(tpath, (com_tiles['FNAME'])[tnum[sind[bdy]]-1])
     vals = numpy.zeros(nval, dtype='float')
     for i in range(0, nu):
         indl = bdy[i]
@@ -109,7 +109,7 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='dev', tpath=''):
         xx = x[sind[indl:indu]]
         yy = y[sind[indl:indu]]
 
-        xoffs = int(max(numpy.floor(numpy.min(xx)), 0)) # convert to integer?
+        xoffs = int(max(numpy.floor(numpy.min(xx)), 0))
         yoffs = int(max(numpy.floor(numpy.min(yy)), 0))
 
         xmax = int(min(numpy.ceil(numpy.max(xx)), par['pix']-1)) + 1 # <---
@@ -126,13 +126,18 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='dev', tpath=''):
                                                     [xx-xoffs, yy-yoffs],
                                                     order=1,
                                                     cval=numpy.nan)
-# ^^ the above line has all kinds of possible issues, need to investigate
+        # the above line has all kinds of possible issues, need to investigate
     return vals
 
-def w3_getval(ra, dec, exten=0, tilepath='', release='dev'):
-    tnum, x, y = coord_to_tile(ra, dec)
+def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=0,
+              mjysr=0):
+    tnum, x, y = coord_to_tile(ra, dec, large=large)
     vals = tile_interp_val(tnum, x, y, exten=exten, tpath=tilepath,
-                           release=release)
+                           release=release, large=large)
+    if mjysr:
+        par = tile_par_struc(release=release, large=large)
+        vals *= par['calfac']
+    
     return vals
 
 def init_dict(keys, name):

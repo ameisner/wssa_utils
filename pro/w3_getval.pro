@@ -28,6 +28,8 @@
 ; KEYWORDS:
 ;   tilepath - directory containing WSSA tile fits files
 ;   release  - for now 'dev' or '1.0', 'dev' is default
+;   large - set for 8k x 8k tiles, default is 3k x 3k
+;   mjysr - set for result in MJy/sr, default is W3 DN
 ;
 ; OUTPUTS:
 ;   vals - values at (ra, dec) interpolated off of WSSA tiles
@@ -41,7 +43,8 @@
 ; REVISION HISTORY:
 ;   2013-Aug-19 - Aaron Meisner
 ;----------------------------------------------------------------------
-function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release
+function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
+                    large=large, mjysr=mjysr
 
   if ~keyword_set(exten) then exten = 0
   exten = string_to_ext(exten, release=release)
@@ -53,6 +56,11 @@ function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release
       release=release)
 
   if n_elements(vals) GT 1 then vals = reform(vals, size(ra, /dim))
+
+  if keyword_set(mjysr) then begin
+      par = tile_par_struc(release=release, large=large)
+      vals *= float(par.calfac) ; don't convert vals to double
+  endif
 
   return, vals
 

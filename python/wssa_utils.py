@@ -20,16 +20,19 @@ def tile_par_struc(large=0, release='1.0', w4=0):
     """
 
     # tile sidelength, degrees
-    sidelen = 12.5 # python float = 32 bits, right?
+    sidelen   = 12.5
     # tile sidelength, pixels
-    pix = (8000. if large else 3000.)
+    pix       = (8000. if large else 3000.)
     # pixel scale, asec/pixel
-    pscl = (5.625 if large else 15.)
+    pscl      = (5.625 if large else 15.)
     # central coordinate, lower left = (0,0)
-    crpix = (3999.5 if large else 1499.5)
+    crpix     = (3999.5 if large else 1499.5)
     # name of index file with tile centers, etc.
     indexfile = os.path.join(os.environ['WISE_DATA'],
                              'wisetile-index-allsky.fits')
+    # file containing HEALPix -> tile lookup table
+    lookup = os.path.join(os.environ['WISE_DATA'], 'pixel_lookup.fits')
+
     # extension names, clean this up later, for now useful to see list
     if release == 'dev':
         extens = {'clean' : 0,
@@ -50,13 +53,14 @@ def tile_par_struc(large=0, release='1.0', w4=0):
                   'amsk'  : 5,
                   'omsk'  : 6,
                   'art'   : 7 }
+
     # boolean indicating whether each extension should be treated as a bit-mask
-    ismsk = ([0,0,0,0,0,0,1,1,0] if (release == 'dev') else [0,0,0,0,0,1,1,])
+    ismsk  = ([0,0,0,0,0,0,1,1,0] if (release == 'dev') else [0,0,0,0,0,1,1,])
     # number of tiles, don't want random 430's all over my code
-    ntile = 430
+    ntile  = 430
     # default tile path
-    tpath = '/fink1/ameisner/tile-combine-8k' if large else \
-            '/fink1/ameisner/tile-planck-zp'
+    tpath  = '/fink1/ameisner/tile-combine-8k' if large else \
+             '/fink1/ameisner/tile-planck-zp'
     # conversion from factor from W3 DN to MJy/sr
     calfac = 0.0163402
 
@@ -69,7 +73,8 @@ def tile_par_struc(large=0, release='1.0', w4=0):
            'ismsk'     : ismsk,
            'ntile'     : ntile,
            'tpath'     : tpath,
-           'calfac'    : calfac   }
+           'calfac'    : calfac,
+           'lookup'    : lookup    }
 
     return par
 
@@ -92,6 +97,7 @@ def issa_proj_gnom(ra, dec, ra0, dec0, scale):
        This is my port of an IDL routine, issa_proj_gnom.pro,
        originally written by Doug Finkbeiner.
     """
+
     A = numpy.cos(dec)*numpy.cos(ra-ra0)
     F = scale/(numpy.sin(dec0)*numpy.sin(dec) + A*numpy.cos(dec0))
 
@@ -165,7 +171,7 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
     for i in range(0, nu):
         indl = bdy[i]
         indu = (nval if (i == (nu-1)) else bdy[i+1])
-        print 'reading: ' + fname[i]
+        print('reading: ' + fname[i])
         xx = x[sind[indl:indu]]
         yy = y[sind[indl:indu]]
 
@@ -227,8 +233,8 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=0,
     
     return vals
 
-def init_dict(keys, name):
-    fname = os.path.join(os.environ['WISE_DATA'], name)
+def init_dict(keys, fname):
+    """Ingest FITS table and return dictionary containing the data."""
     hdus = pyfits.open(fname)
     tab = hdus[1].data
     d = {}
@@ -238,11 +244,15 @@ def init_dict(keys, name):
     return d
 
 def init_global():
+    """Initialize global variables."""
     global com_pix_tile, com_tiles
+    par = tile_par_struc()
+
     print("loading auxiliary data...")
-    com_pix_tile.update(init_dict(['PIX', 'TILE'], 'pixel_lookup.fits'))
-    com_tiles   = init_dict(['FNAME', 'RA', 'DEC', 'LGAL', 'BGAL'],
-                            'wisetile-index-allsky.fits') # use par.indexfile
+    com_pix_tile.update(init_dict(['PIX', 'TILE'],
+                                  par['lookup']))
+    com_tiles.update(init_dict(['FNAME', 'RA', 'DEC', 'LGAL', 'BGAL'],
+                            par['indexfile']))
     print("...done")
 
 init_global()

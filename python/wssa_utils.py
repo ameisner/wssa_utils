@@ -9,7 +9,16 @@ com_pix_tile = {'NSIDE': 64}
 com_tiles    = {}
 radeg = 180./numpy.pi
 
-def tile_par_struc(large=0, w4=0, release='1.0'):
+def tile_par_struc(large=0, release='1.0', w4=0):
+    """
+    Create dictionary stroring important WSSA tile related parameters.
+
+    Keyword Inputs:
+        large   - set for 8k x 8k tiles, default is 3k x 3k
+        release - for now 'dev' or '1.0', '1.0' is default
+        w4      - not yet implemented
+    """
+
     # tile sidelength, degrees
     sidelen = 12.5 # python float = 32 bits, right?
     # tile sidelength, pixels
@@ -65,7 +74,24 @@ def tile_par_struc(large=0, w4=0, release='1.0'):
     return par
 
 def issa_proj_gnom(ra, dec, ra0, dec0, scale):
-    # all inputs need to be in radians
+    """
+    Project points from longitude and latitude to a gnomic projection.
+
+    Inputs:
+        ra    - array of RA coordinates, assumed radians J2000
+        dec   - array of DEC coordinates, assumed radians J2000
+        ra0   - array of central RA of projection, radians
+        dec0  - array of central DEC of projection, radians
+        scale - scale factor of projection in pixels/radian
+
+    Outputs:
+        x     - array of x coordinates within each tile, relative to center
+        y     - array of y coordinates within each tile, relative to center
+
+    Comments:
+       This is my port of an IDL routine, issa_proj_gnom.pro,
+       originally written by Doug Finkbeiner.
+    """
     A = numpy.cos(dec)*numpy.cos(ra-ra0)
     F = scale/(numpy.sin(dec0)*numpy.sin(dec) + A*numpy.cos(dec0))
 
@@ -75,7 +101,22 @@ def issa_proj_gnom(ra, dec, ra0, dec0, scale):
     return x, y
 
 def coord_to_tile(ra, dec, large=0):
-    # assume ra,dec in degrees
+    """
+    Translate (ra,dec) coordinates to WSSA tiles using HEALPix lookup table.
+
+    Inputs:
+        ra  - array of RA coordinates, assumed degrees J2000
+        dec - array of DEC coordinates, assumed degrees J2000
+
+    Keyword inputs:
+        large    - set for 8k x 8k tiles, default is 3k x 3k
+
+    Outputs:
+        tlist - array of tiles corresponding to each (ra, dec) pair
+        x     - array of x coordinates within each tile
+        y     - array of y coordinates within each tile
+    """
+
     pix = healpy.ang2pix(com_pix_tile['NSIDE'], (90.-dec)/radeg, ra/radeg)
     tlist = (com_pix_tile['TILE'])[pix]
     del pix
@@ -86,6 +127,7 @@ def coord_to_tile(ra, dec, large=0):
                           (com_tiles['DEC'])[tlist-1]/radeg, scale)
     x += par['crpix']
     y += par['crpix']
+
     return tlist, x, y
 
 def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
@@ -192,6 +234,7 @@ def init_dict(keys, name):
     d = {}
     for key in keys:
         d[key] = tab[key]
+
     return d
 
 def init_global():

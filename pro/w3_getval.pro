@@ -14,21 +14,21 @@
 ;
 ; OPTIONAL INPUTS:
 ;   exten - extension, either as an integer or string, acceptable
-;           values depend on release, but for release='dev':
+;           values depend on release, but for release='1.0':
 ;                0: 'clean'
 ;                1: 'dirt'
 ;                2: 'cov'
-;                3: 'sfd'
-;                4: 'min'
-;                5: 'max'
-;                6: 'amsk'
-;                7: 'omsk'
-;                8: 'art'
+;                3: 'min'
+;                4: 'max'
+;                5: 'amsk'
+;                6: 'omsk'
+;                7: 'art'
 ;
 ; KEYWORDS:
 ;   tilepath - directory containing WSSA tile fits files
-;   release  - for now 'dev' or '1.0', 'dev' is default
-;   large - set for 8k x 8k tiles, default is 3k x 3k
+;   release  - for now 'dev' or '1.0', '1.0' is now default
+;   large - large = 1 for 8k x 8k tiles, large = 1 is now default,
+;           specify large = 0 for 3k x 3k
 ;   mjysr - set for result in MJy/sr, default is W3 DN
 ;
 ; OUTPUTS:
@@ -47,6 +47,10 @@ function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
                     large=large, mjysr=mjysr
 
   if ~keyword_set(exten) then exten = 0
+; ----- make large = 1 (8k x 8k tiles) default
+  if n_elements(large) EQ 0 then large = 1
+  if ~keyword_set(release) then release = '1.0'
+
   exten = string_to_ext(exten, release=release)
 ; ----- don't try to interpolate off of SFD extension
   if exten EQ string_to_ext('sfd') then return, -1

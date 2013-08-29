@@ -9,7 +9,7 @@ com_pix_tile = {'NSIDE': 64}
 com_tiles    = {}
 radeg = 180./np.pi
 
-def tile_par_struc(large=False, release='1.0'):
+def tile_par_struc(large=True, release='1.0'):
     """
     Create dictionary stroring important WSSA tile related parameters.
 
@@ -58,8 +58,8 @@ def tile_par_struc(large=False, release='1.0'):
     # number of tiles, don't want random 430's all over my code
     ntile  = 430
     # default tile path
-    tpath  = '/fink1/ameisner/tile-combine-8k' if large else \
-             '/fink1/ameisner/tile-planck-zp'
+    tpath  = '/n/fink1/ameisner/tile-combine-8k' if large else \
+             '/n/fink1/ameisner/tile-planck-zp'
     # conversion from factor from W3 DN to MJy/sr
     calfac = 0.0163402
 
@@ -105,7 +105,7 @@ def issa_proj_gnom(ra, dec, ra0, dec0, scale):
 
     return x, y
 
-def coord_to_tile(ra, dec, large=False):
+def coord_to_tile(ra, dec, large=True):
     """
     Translate (ra,dec) coordinates to WSSA tiles using HEALPix lookup table.
 
@@ -135,7 +135,7 @@ def coord_to_tile(ra, dec, large=False):
 
     return tlist, x, y
 
-def tile_interp_val(tnum, x, y, large=False, exten=0, release='1.0', tpath=''):
+def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
     """
     Use (x,y) pairs and tile numbers to sample values from WSSA tiles.
 
@@ -194,7 +194,7 @@ def tile_interp_val(tnum, x, y, large=False, exten=0, release='1.0', tpath=''):
         # the above line has all kinds of possible issues, need to investigate
     return vals
 
-def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=False,
+def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
               mjysr=False):
     """
     Sample values from WSSA tiles at specified celestial coordinates.

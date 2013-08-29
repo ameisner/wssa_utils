@@ -67,8 +67,8 @@ function tile_par_struc, large=large, w4=w4, release=release
 ; ----- number of tiles, don't want random 430's all over my code
   ntile = 430
 ; ----- default tile path
-  tpath = keyword_set(large) ? '/fink1/ameisner/tile-combine-8k' : $ 
-                               '/fink1/ameisner/tile-planck-zp'
+  tpath = keyword_set(large) ? '/n/fink1/ameisner/tile-combine-8k' : $ 
+                               '/n/fink1/ameisner/tile-planck-zp'
 ; ----- conversion from factor from W3 DN to MJy/sr
   calfac = 0.0163402d
 

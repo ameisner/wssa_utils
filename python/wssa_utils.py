@@ -89,7 +89,25 @@ def coord_to_tile(ra, dec, large=0):
     return tlist, x, y
 
 def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
-    
+    """
+    Use (x,y) pairs and tile numbers to sample values from WSSA tiles.
+
+    Inputs:
+        tnum - array of tile numbers, [1, 430]
+        x    - array of x coordinates within relevant tiles
+        y    - array of y coordinates within relevant tiles
+
+    Keyword inputs:
+        large    - set for 8k x 8k tiles, default is 3k x 3k
+        exten    - fits extension, default to 0, currently implemented
+                   only for scalar exten values
+        release  - for now 'dev' or '1.0', '1.0' is default
+        large    - set for 8k x 8k tiles, default is 3k x 3k
+
+    Outputs:
+        vals - values at (x,y) sampled from tiles tnum
+    """
+
     par = tile_par_struc(large=large, release=release)
     if isinstance(exten, str):
         exten = (par['extens'])[exten]
@@ -132,7 +150,7 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
 def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=0,
               mjysr=0):
     """
-    Sample values from WSSA tiles at specified coordinates.
+    Sample values from WSSA tiles at specified celestial coordinates.
 
     Inputs:
         ra  - array of RA coordinates, assumed degrees J2000
@@ -155,7 +173,7 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=0,
         mjysr    - set for result in MJy/sr, default is W3 DN
 
     Outputs:
-        vals - values at (ra, dec) interpolated off of WSSA tiles
+        vals - values at (ra, dec) sampled from  WSSA tiles
     """
 
     tnum, x, y = coord_to_tile(ra, dec, large=large)

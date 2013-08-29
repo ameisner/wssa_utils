@@ -131,6 +131,33 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
 
 def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=0,
               mjysr=0):
+    """
+    Sample values from WSSA tiles at specified coordinates.
+
+    Inputs:
+        ra  - array of RA coordinates, assumed degrees J2000
+        dec - array of DEC coordinates, assumed degrees J2000
+
+    Keyword inputs:
+        exten - extension, either as an integer or string, acceptable
+                values depend on release, but for release='1.0':
+                    0: 'clean'
+                    1: 'dirt'
+                    2: 'cov'
+                    3: 'min'
+                    4: 'max'
+                    5: 'amsk'
+                    6: 'omsk'
+                    7: 'art'
+        tilepath - directory containing WSSA tiles
+        release  - for now 'dev' or '1.0', '1.0' is default
+        large    - set for 8k x 8k tiles, default is 3k x 3k
+        mjysr    - set for result in MJy/sr, default is W3 DN
+
+    Outputs:
+        vals - values at (ra, dec) interpolated off of WSSA tiles
+    """
+
     tnum, x, y = coord_to_tile(ra, dec, large=large)
     vals = tile_interp_val(tnum, x, y, exten=exten, tpath=tilepath,
                            release=release, large=large)
@@ -151,10 +178,10 @@ def init_dict(keys, name):
 
 def init_global():
     global com_pix_tile, com_tiles
-    print 'loading auxiliary data...'
+    print("loading auxiliary data...")
     com_pix_tile.update(init_dict(['PIX', 'TILE'], 'pixel_lookup.fits'))
     com_tiles   = init_dict(['FNAME', 'RA', 'DEC', 'LGAL', 'BGAL'],
-                            'wisetile-index-allsky.fits')
-    print '...done'
+                            'wisetile-index-allsky.fits') # use par.indexfile
+    print("...done")
 
 init_global()

@@ -1,5 +1,5 @@
 import os
-import numpy
+import numpy as np
 import pyfits
 import healpy
 from scipy.ndimage import map_coordinates
@@ -7,16 +7,15 @@ from scipy.ndimage import map_coordinates
 # global variables
 com_pix_tile = {'NSIDE': 64}
 com_tiles    = {}
-radeg = 180./numpy.pi
+radeg = 180./np.pi
 
-def tile_par_struc(large=0, release='1.0', w4=0):
+def tile_par_struc(large=False, release='1.0'):
     """
     Create dictionary stroring important WSSA tile related parameters.
 
     Keyword Inputs:
         large   - set for 8k x 8k tiles, default is 3k x 3k
         release - for now 'dev' or '1.0', '1.0' is default
-        w4      - not yet implemented
     """
 
     # tile sidelength, degrees
@@ -98,15 +97,15 @@ def issa_proj_gnom(ra, dec, ra0, dec0, scale):
        originally written by Doug Finkbeiner.
     """
 
-    A = numpy.cos(dec)*numpy.cos(ra-ra0)
-    F = scale/(numpy.sin(dec0)*numpy.sin(dec) + A*numpy.cos(dec0))
+    A = np.cos(dec)*np.cos(ra-ra0)
+    F = scale/(np.sin(dec0)*np.sin(dec) + A*np.cos(dec0))
 
-    x = -F*numpy.cos(dec)*numpy.sin(ra-ra0)
-    y = F*(numpy.cos(dec0)*numpy.sin(dec) - A*numpy.sin(dec0))
+    x = -F*np.cos(dec)*np.sin(ra-ra0)
+    y = F*(np.cos(dec0)*np.sin(dec) - A*np.sin(dec0))
 
     return x, y
 
-def coord_to_tile(ra, dec, large=0):
+def coord_to_tile(ra, dec, large=False):
     """
     Translate (ra,dec) coordinates to WSSA tiles using HEALPix lookup table.
 
@@ -136,7 +135,7 @@ def coord_to_tile(ra, dec, large=0):
 
     return tlist, x, y
 
-def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
+def tile_interp_val(tnum, x, y, large=False, exten=0, release='1.0', tpath=''):
     """
     Use (x,y) pairs and tile numbers to sample values from WSSA tiles.
 
@@ -162,12 +161,12 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
     if tpath == '':
         tpath = par['tpath']
     nval = len(tnum.flat)
-    sind = numpy.argsort(tnum)
-    tu, bdy = numpy.unique(tnum[sind], return_index=True)
+    sind = np.argsort(tnum)
+    tu, bdy = np.unique(tnum[sind], return_index=True)
     nu = len(tu.flat)
 
     fname = os.path.join(tpath, (com_tiles['FNAME'])[tnum[sind[bdy]]-1])
-    vals = numpy.zeros(nval, dtype='float')
+    vals = np.zeros(nval, dtype='float')
     for i in range(0, nu):
         indl = bdy[i]
         indu = (nval if (i == (nu-1)) else bdy[i+1])
@@ -175,28 +174,28 @@ def tile_interp_val(tnum, x, y, large=0, exten=0, release='1.0', tpath=''):
         xx = x[sind[indl:indu]]
         yy = y[sind[indl:indu]]
 
-        xoffs = int(max(numpy.floor(numpy.min(xx)), 0))
-        yoffs = int(max(numpy.floor(numpy.min(yy)), 0))
+        xoffs = int(max(np.floor(np.min(xx)), 0))
+        yoffs = int(max(np.floor(np.min(yy)), 0))
 
-        xmax = int(min(numpy.ceil(numpy.max(xx)), par['pix']-1)) + 1 # <---
-        ymax = int(min(numpy.ceil(numpy.max(yy)), par['pix']-1)) + 1 # <---
+        xmax = int(min(np.ceil(np.max(xx)), par['pix']-1)) + 1 # <---
+        ymax = int(min(np.ceil(np.max(yy)), par['pix']-1)) + 1 # <---
 
         hdus = pyfits.open(fname[i])
         subim = hdus[exten].section[xoffs:xmax, yoffs:ymax]
         if (par['ismsk'])[exten] == 1:
             vals[sind[indl:indu]] = \
-            subim[(numpy.round(xx)).astype('int')-xoffs,
-                  (numpy.round(yy)).astype('int')-yoffs]
+            subim[(np.round(xx)).astype('int')-xoffs,
+                  (np.round(yy)).astype('int')-yoffs]
         else:
             vals[sind[indl:indu]] = map_coordinates(subim,
                                                     [xx-xoffs, yy-yoffs],
                                                     order=1,
-                                                    cval=numpy.nan)
+                                                    cval=np.nan)
         # the above line has all kinds of possible issues, need to investigate
     return vals
 
-def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=0,
-              mjysr=0):
+def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=False,
+              mjysr=False):
     """
     Sample values from WSSA tiles at specified celestial coordinates.
 

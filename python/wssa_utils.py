@@ -187,7 +187,7 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
         yy = y[sind[indl:indu]]
 
         print('[' + str(i+1) + '/' + str(nu) + '] Reading: ' +
-              os.path.join(tpath, fname[i]) + ', ' + str(len(xx)) + ' samples'
+              os.path.join(tpath, fname[i]) + ', ' + str(len(xx)) + ' samples')
 
         xoffs = int(max(np.floor(np.min(xx)), 0))
         yoffs = int(max(np.floor(np.min(yy)), 0))
@@ -238,13 +238,19 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
         vals - values at (ra, dec) sampled from  WSSA tiles
     """
 
+    sh = ra.shape
+    ra = ra.ravel()
+    dec = dec.ravel()
+
     tnum, x, y = coord_to_tile(ra, dec, large=large)
     vals = tile_interp_val(tnum, x, y, exten=exten, tpath=tilepath,
                            release=release, large=large)
     if mjysr:
         par = tile_par_struc(release=release, large=large)
         vals *= par['calfac']
-    
+
+    vals = vals.reshape(sh)
+
     return vals
 
 def init_dict(keys, fname):

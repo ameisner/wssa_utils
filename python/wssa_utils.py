@@ -256,13 +256,15 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
 
     return vals
 
-def init_dict(keys, fname):
+def init_dict(fname):
     """Ingest FITS table and return dictionary containing the data."""
     hdus = pyfits.open(fname)
-    tab = hdus[1].data
-    d = {}
-    for key in keys:
-        d[key] = tab[key]
+    cols = hdus[1].columns
+    tab  = hdus[1].data
+    d    = {}
+
+    for col in cols:
+        d[col.name] = tab[col.name]
 
     return d
 
@@ -271,11 +273,9 @@ def init_global():
     global com_pix_tile, com_tiles
     par = tile_par_struc()
 
-    print("loading auxiliary data...")
-    com_pix_tile.update(init_dict(['PIX', 'TILE'],
-                                  par['lookup']))
-    com_tiles.update(init_dict(['FNAME', 'RA', 'DEC', 'LGAL', 'BGAL'],
-                            par['indexfile']))
-    print("...done")
+    print "loading auxiliary data...",
+    com_pix_tile.update(init_dict(par['lookup']))
+    com_tiles.update(init_dict(par['indexfile']))
+    print("done")
 
 init_global()

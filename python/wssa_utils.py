@@ -206,7 +206,6 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
                                                     [yy-yoffs, xx-xoffs],
                                                     order=1,
                                                     cval=np.nan)
-        # the above line has all kinds of possible issues, need to investigate
     return vals
 
 def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
@@ -237,6 +236,10 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
     Outputs:
         vals - values at (ra, dec) sampled from  WSSA tiles
     """
+
+    if not isinstance(ra, np.ndarray):
+        print("Input coordinates need to be of type numpy.ndarray")
+        return -1
 
     sh = ra.shape
     ra = ra.ravel()

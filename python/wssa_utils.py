@@ -135,6 +135,19 @@ def coord_to_tile(ra, dec, large=True):
 
     return tlist, x, y
 
+def uniq(arr):
+    """
+    Return sorted unique values and indices of their first appearance.
+
+    Inputs:
+        arr - a sorted array
+    """
+    
+    r = np.roll(arr, 1)
+    bdy = (np.where([r != arr]))[1]
+    u = arr[bdy]
+    return u, bdy
+
 def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
     """
     Use (x,y) pairs and tile numbers to sample values from WSSA tiles.
@@ -162,33 +175,35 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
         tpath = par['tpath']
     nval = len(tnum.flat)
     sind = np.argsort(tnum)
-    tu, bdy = np.unique(tnum[sind], return_index=True)
+    tu, bdy = uniq(tnum[sind])
     nu = len(tu.flat)
 
-    fname = os.path.join(tpath, (com_tiles['FNAME'])[tnum[sind[bdy]]-1])
+    fname = (com_tiles['FNAME'])[tnum[sind[bdy]]-1]
     vals = np.zeros(nval, dtype='float')
     for i in range(0, nu):
         indl = bdy[i]
         indu = (nval if (i == (nu-1)) else bdy[i+1])
-        print('reading: ' + fname[i])
         xx = x[sind[indl:indu]]
         yy = y[sind[indl:indu]]
+
+        print('[' + str(i+1) + '/' + str(nu) + '] Reading: ' +
+              os.path.join(tpath, fname[i]) + ', ' + str(len(xx)) + ' samples'
 
         xoffs = int(max(np.floor(np.min(xx)), 0))
         yoffs = int(max(np.floor(np.min(yy)), 0))
 
-        xmax = int(min(np.ceil(np.max(xx)), par['pix']-1)) + 1 # <---
-        ymax = int(min(np.ceil(np.max(yy)), par['pix']-1)) + 1 # <---
+        xmax = int(min(np.ceil(np.max(xx)), par['pix']-1)) + 1
+        ymax = int(min(np.ceil(np.max(yy)), par['pix']-1)) + 1
 
-        hdus = pyfits.open(fname[i])
-        subim = hdus[exten].section[xoffs:xmax, yoffs:ymax]
+        hdus = pyfits.open(os.path.join(tpath, fname[i]))
+        subim = hdus[exten].section[yoffs:ymax, xoffs:xmax]
         if (par['ismsk'])[exten] == 1:
             vals[sind[indl:indu]] = \
-            subim[(np.round(xx)).astype('int')-xoffs,
-                  (np.round(yy)).astype('int')-yoffs]
+            subim[(np.round(yy)).astype('int')-yoffs,
+                  (np.round(xx)).astype('int')-xoffs]
         else:
             vals[sind[indl:indu]] = map_coordinates(subim,
-                                                    [xx-xoffs, yy-yoffs],
+                                                    [yy-yoffs, xx-xoffs],
                                                     order=1,
                                                     cval=np.nan)
         # the above line has all kinds of possible issues, need to investigate

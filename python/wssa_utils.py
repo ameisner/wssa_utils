@@ -240,8 +240,7 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
     """
 
     if not isinstance(ra, np.ndarray):
-        print("Input coordinates need to be of type numpy.ndarray")
-        return -1
+        raise TypeError("Input coordinates must be of type numpy.ndarray")
 
     sh = ra.shape
     ra = ra.ravel()

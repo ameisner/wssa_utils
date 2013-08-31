@@ -147,6 +147,10 @@ def uniq(arr):
     
     r = np.roll(arr, 1)
     bdy = (np.where([r != arr]))[1]
+
+    if len(bdy) == 0:
+        return arr[0], np.array([0])
+
     u = arr[bdy]
     return u, bdy
 

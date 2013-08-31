@@ -253,8 +253,11 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
     tnum, x, y = coord_to_tile(ra, dec, large=large)
     vals = tile_interp_val(tnum, x, y, exten=exten, tpath=tilepath,
                            release=release, large=large)
-    if mjysr:
-        par = tile_par_struc(release=release, large=large)
+
+    par = tile_par_struc(release=release, large=large)
+    mask = (par['ismsk'])[exten]
+
+    if mjysr and not mask:
         vals *= par['calfac']
 
     vals = vals.reshape(sh)

@@ -64,6 +64,8 @@ def tile_par_struc(large=True, release='1.0'):
              '/n/fink1/ameisner/tile-planck-zp'
     # conversion from factor from W3 DN to MJy/sr
     calfac = 0.0163402
+    # data type for intensity and bit-mask outputs, respectively
+    dtype  = ['float32', 'int32']
 
     par = {'sidelen'   : sidelen,
            'pix'       : pix,
@@ -75,7 +77,8 @@ def tile_par_struc(large=True, release='1.0'):
            'ntile'     : ntile,
            'tpath'     : tpath,
            'calfac'    : calfac,
-           'lookup'    : lookup    }
+           'lookup'    : lookup, 
+           'dtype'     : dtype    }
 
     return par
 
@@ -185,7 +188,7 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
     nu = len(tu.flat)
 
     fname = (com_tiles['FNAME'])[tnum[sind[bdy]]-1]
-    vals = np.zeros(nval, dtype='float')
+    vals = np.zeros(nval, dtype=(par['dtype'])[(par['ismsk'])[exten]])
     for i in range(0, nu):
         indl = bdy[i]
         indu = (nval if (i == (nu-1)) else bdy[i+1])

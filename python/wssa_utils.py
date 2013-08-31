@@ -1,3 +1,5 @@
+"""Utilities for reading WSSA tiles."""
+
 import os
 import numpy as np
 import pyfits

@@ -61,10 +61,11 @@ function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
 
   if n_elements(vals) GT 1 then vals = reform(vals, size(ra, /dim))
 
-  if keyword_set(mjysr) then begin
-      par = tile_par_struc(release=release, large=large)
-      vals *= float(par.calfac) ; don't convert vals to double
-  endif
+  par = tile_par_struc(release=release, large=large)
+  mask = (par.ismsk)[exten]
+
+  if mask then vals = long(vals)
+  if keyword_set(mjysr) AND (~mask) then vals *= float(par.calfac)
 
   return, vals
 

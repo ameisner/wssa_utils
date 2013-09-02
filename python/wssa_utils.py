@@ -13,7 +13,7 @@ radeg = 180./np.pi
 
 def tile_par_struc(large=True, release='1.0'):
     """
-    Create dictionary stroring important WSSA tile related parameters.
+    Create dictionary storing important WSSA tile related parameters.
 
     Keyword Inputs:
         large   - set for 8k x 8k tiles, default is 3k x 3k

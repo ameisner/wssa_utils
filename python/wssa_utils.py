@@ -157,7 +157,8 @@ def uniq(arr):
     u = arr[bdy]
     return u, bdy
 
-def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
+def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath='',
+                    gz=False):
     """
     Use (x,y) pairs and tile numbers to sample values from WSSA tiles.
 
@@ -194,9 +195,10 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
         indu = (nval if (i == (nu-1)) else bdy[i+1])
         xx = x[sind[indl:indu]]
         yy = y[sind[indl:indu]]
+        f = os.path.join(tpath, fname[i]) + ('.gz' if gz else '')
 
-        print('[' + str(i+1) + '/' + str(nu) + '] Reading: ' +
-              os.path.join(tpath, fname[i]) + ', ' + str(len(xx)) + ' samples')
+        print('[' + str(i+1) + '/' + str(nu) + '] Reading: ' + f + ', ' +
+              str(len(xx)) + ' samples')
 
         xoffs = int(max(np.floor(np.min(xx)), 0))
         yoffs = int(max(np.floor(np.min(yy)), 0))
@@ -204,7 +206,7 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
         xmax = int(min(np.ceil(np.max(xx)), par['pix']-1)) + 1
         ymax = int(min(np.ceil(np.max(yy)), par['pix']-1)) + 1
 
-        hdus = pyfits.open(os.path.join(tpath, fname[i]))
+        hdus = pyfits.open(f)
         subim = hdus[exten].section[yoffs:ymax, xoffs:xmax]
         if (par['ismsk'])[exten] == 1:
             vals[sind[indl:indu]] = \
@@ -218,7 +220,7 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath=''):
     return vals
 
 def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
-              mjysr=False):
+              mjysr=False, gz=False):
     """
     Sample values from WSSA tiles at specified celestial coordinates.
 
@@ -255,7 +257,7 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
 
     tnum, x, y = coord_to_tile(ra, dec, large=large)
     vals = tile_interp_val(tnum, x, y, exten=exten, tpath=tilepath,
-                           release=release, large=large)
+                           release=release, large=large, gz=gz)
 
     par = tile_par_struc(release=release, large=large)
     mask = (par['ismsk'])[exten]

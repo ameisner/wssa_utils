@@ -37,7 +37,7 @@
 ;   2013-Aug-18 - Aaron Meisner
 ;----------------------------------------------------------------------
 function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $ 
-                          release=release
+                          release=release, gz=gz
 
   if ~keyword_set(exten) then exten = 0
 ; ----- make sure exten is an integer, do some checks on exten
@@ -53,6 +53,7 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
   nu = n_elements(bdy)
   fname = concat_dir(tpath, $ 
       'wise_' + string(tnum[sind[bdy]], format='(I03)') + '.fits')
+  if keyword_set(gz) then fname += '.gz'
 
   vals = dblarr(nval) ; can debate float vs. double here later
   for i=0, nu-1 do begin

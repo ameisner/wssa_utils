@@ -44,7 +44,7 @@
 ;   2013-Aug-19 - Aaron Meisner
 ;----------------------------------------------------------------------
 function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
-                    large=large, mjysr=mjysr
+                    large=large, mjysr=mjysr, gz=gz
 
   if ~keyword_set(exten) then exten = 0
 ; ----- make large = 1 (8k x 8k tiles) default
@@ -57,7 +57,7 @@ function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
 
   coord_to_tile, ra, dec, tnum, x=x, y=y, large=large
   vals = tile_val_interp(tnum, x, y, exten=exten, tpath=tilepath, $ 
-      release=release, large=large)
+      release=release, large=large, gz=gz)
 
   if n_elements(vals) GT 1 then vals = reform(vals, size(ra, /dim))
 

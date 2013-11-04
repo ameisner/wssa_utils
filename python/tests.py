@@ -36,6 +36,9 @@ def test_bad_lat():
 def test_ext_type():
     """test that extension samples are of correct type, e.g. mask is integer"""
 
+def test_poles():
+    """see if anything breaks at poles"""
+
 def test_unit_conversion():
     """test that conversion to to MJy/sr from DN happening when appropriate"""
 

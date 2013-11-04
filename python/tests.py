@@ -55,6 +55,15 @@ def test_ext_type():
 
 def test_poles():
     """see if anything breaks at poles"""
+    print test_poles.__doc__
+    
+    ra = np.array([0.])
+    for d in [-90., 90.]:
+        dec = np.array([d])
+        val = wssa_utils.w3_getval(ra, dec)
+        assert isinstance(val, np.ndarray)
+        assert val.dtype.name == 'float32'
+        assert val[0] != 0
 
 def test_unit_conversion():
     """test that conversion to to MJy/sr from DN happening when appropriate"""
@@ -80,4 +89,5 @@ if __name__ == '__main__':
     test_single_pair()
     test_many_tiles()
     test_unit_conversion()
+    test_poles()
     print 'successfully completed testing'

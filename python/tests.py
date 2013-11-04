@@ -8,9 +8,18 @@ import pyfits
 import numpy as np
 import healpy
 import wssa_utils
+from random_lonlat import random_lonlat
 
 def test_single_pair():
     """test a single (lon, lat) pair"""
+    print test_single_pair.__doc__
+
+    nsam = 1
+    ra, dec = random_lonlat(nsam, deg=True)
+    val = wssa_utils.w3_getval(ra, dec)
+    assert isinstance(val, np.ndarray)
+    assert val.dtype.name == 'float32'
+    assert val.shape == (1,)
 
 def test_many_coords():
     """lon and lat both 1d arrays, all within single tile"""
@@ -45,4 +54,5 @@ def test_unit_conversion():
 if __name__ == '__main__':
 # eventually need to allow tilepath as keyword argument somehow
     """run the above tests"""
+    test_single_pair()
     print 'successfully completed testing'

@@ -58,10 +58,26 @@ def test_poles():
 
 def test_unit_conversion():
     """test that conversion to to MJy/sr from DN happening when appropriate"""
+    print test_unit_conversion.__doc__
+
+    nsam = 1
+    ra, dec = random_lonlat(nsam, deg=True)
+    val = wssa_utils.w3_getval(ra, dec)
+    val_mjysr = wssa_utils.w3_getval(ra, dec, mjysr=True)
+    assert isinstance(val_mjysr, np.ndarray)
+    assert val_mjysr.dtype.name == 'float32'
+    assert val.shape == (nsam,)
+    assert val[0] != 0
+
+    rat = val_mjysr[0]/val[0]
+    tol = 1.0e-5
+    tru = wssa_utils.tile_par_struc()['calfac']
+    assert np.abs(rat-tru) < tol
 
 if __name__ == '__main__':
 # eventually need to allow tilepath as keyword argument somehow
     """run the above tests"""
     test_single_pair()
     test_many_tiles()
+    test_unit_conversion()
     print 'successfully completed testing'

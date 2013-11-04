@@ -19,13 +19,21 @@ def test_single_pair():
     val = wssa_utils.w3_getval(ra, dec)
     assert isinstance(val, np.ndarray)
     assert val.dtype.name == 'float32'
-    assert val.shape == (1,)
+    assert val.shape == (nsam,)
 
 def test_many_coords():
     """lon and lat both 1d arrays, all within single tile"""
 
 def test_many_tiles():
     """lon and lat both 1d arrays, spread over multiple tiles"""
+    print test_many_tiles.__doc__
+    
+    nsam = 10
+    ra, dec = random_lonlat(nsam, deg=True)
+    vals = wssa_utils.w3_getval(ra, dec)
+    assert isinstance(vals, np.ndarray)
+    assert vals.dtype.name == 'float32'
+    assert vals.shape == (nsam,)
 
 def test_full_sky():
     """lon and lat at every nside=16 HEALPix pixel center"""
@@ -55,4 +63,5 @@ if __name__ == '__main__':
 # eventually need to allow tilepath as keyword argument somehow
     """run the above tests"""
     test_single_pair()
+    test_many_tiles()
     print 'successfully completed testing'

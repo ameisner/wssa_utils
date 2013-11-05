@@ -57,6 +57,15 @@ def test_2d_many():
 
 def test_bad_lon():
     """see if anything breaks when longitude outside of [0, 360)"""
+    print test_bad_lon.__doc__
+
+    dec = np.array([45.]) # arb
+    for r in [-10., 370.]:
+        ra = np.array([r])
+        val = wssa_utils.w3_getval(ra, dec)
+        assert isinstance(val, np.ndarray)
+        assert val.dtype.name == 'float32'
+        assert val.shape == (1,)
 
 def test_bad_lat():
     """see if anything breaks when latitude outside of [-90, 90]"""
@@ -101,5 +110,5 @@ if __name__ == '__main__':
     test_many_tiles()
     test_unit_conversion()
     test_poles()
-    test_full_sky()
+    test_bad_lon()
     print 'successfully completed testing'

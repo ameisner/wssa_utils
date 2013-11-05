@@ -23,6 +23,8 @@ def test_single_pair():
 
 def test_many_coords():
     """lon and lat both 1d arrays, all within single tile"""
+    print test_many_coords.__doc__
+
     racen = wssa_utils.com_tiles['RA'][114]
     deccen = wssa_utils.com_tiles['DEC'][114]
     nsam = 100
@@ -60,6 +62,19 @@ def test_full_sky():
 
 def test_2d_coords():
     """lon and lat both 2d arrays, all within single tile"""
+    print test_2d_coords.__doc__
+
+    racen = wssa_utils.com_tiles['RA'][114]
+    deccen = wssa_utils.com_tiles['DEC'][114]
+    nsam = 100
+    ra = np.random.rand(nsam) - 0.5 + racen
+    dec = np.random.rand(nsam) - 0.5 + deccen
+    sh = (10, 10)
+    ra = ra.reshape(sh)
+    dec = dec.reshape(sh)
+    vals = wssa_utils.w3_getval(ra, dec)
+    assert isinstance(vals, np.ndarray)
+    assert vals.shape == sh
 
 def test_2d_many():
     """lon and lat both 2d arrays, spread over multiple tiles"""
@@ -143,4 +158,5 @@ if __name__ == '__main__':
     test_bad_lon()
     test_ext_type()
     test_many_coords()
+    test_2d_coords()
     print 'successfully completed testing'

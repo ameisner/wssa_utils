@@ -37,6 +37,17 @@ def test_many_tiles():
 
 def test_full_sky():
     """lon and lat at every nside=16 HEALPix pixel center"""
+    print test_full_sky.__doc__
+    
+    nside = 16
+    npix = healpy.pixelfunc.nside2npix(nside)
+    pix = np.arange(npix)
+    theta, phi = healpy.pixelfunc.pix2ang(nside, pix)
+    ra = (180./np.pi)*phi
+    dec = 90. - (180./np.pi)*theta
+    vals = wssa_utils.w3_getval(ra, dec)
+    assert isinstance(vals, np.ndarray)
+    assert vals.shape == (npix,)
 
 def test_2d_coords():
     """lon and lat both 2d arrays, all within single tile"""
@@ -90,4 +101,5 @@ if __name__ == '__main__':
     test_many_tiles()
     test_unit_conversion()
     test_poles()
+    test_full_sky()
     print 'successfully completed testing'

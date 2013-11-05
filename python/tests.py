@@ -73,6 +73,13 @@ def test_bad_lon():
 
 def test_bad_lat():
     """see if anything breaks when latitude outside of [-90, 90]"""
+    print test_bad_lat.__doc__
+
+    ra = np.array([45.]) #arb
+    # just see if this runs without crashing ...
+    for d in [-100., 100.]:
+        dec = np.array([d])
+        val = wssa_utils.w3_getval(ra, dec)
 
 def test_ext_type():
     """test that extension samples are of correct type, e.g. mask is integer"""

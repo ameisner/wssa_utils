@@ -23,7 +23,16 @@ def test_single_pair():
 
 def test_many_coords():
     """lon and lat both 1d arrays, all within single tile"""
-
+    racen = wssa_utils.com_tiles['RA'][114]
+    deccen = wssa_utils.com_tiles['DEC'][114]
+    nsam = 100
+    ra = np.random.rand(nsam) - 0.5 + racen
+    dec = np.random.rand(nsam) - 0.5 + deccen
+    vals = wssa_utils.w3_getval(ra, dec)
+    assert isinstance(vals, np.ndarray)
+    assert vals.dtype.name == 'float32'
+    assert vals.shape == (nsam,)
+    
 def test_many_tiles():
     """lon and lat both 1d arrays, spread over multiple tiles"""
     print test_many_tiles.__doc__
@@ -83,6 +92,16 @@ def test_bad_lat():
 
 def test_ext_type():
     """test that extension samples are of correct type, e.g. mask is integer"""
+    print test_ext_type.__doc__
+
+    nsam = 1
+    ra, dec = random_lonlat(nsam, deg=True)
+    msk = wssa_utils.tile_par_struc()['ismsk']
+    for ext, ismsk in enumerate(msk):
+        if not ismsk: continue
+        val = wssa_utils.w3_getval(ra, dec, exten=ext)
+        assert isinstance(val, np.ndarray)
+        assert val.dtype.name == 'int32'
 
 def test_poles():
     """see if anything breaks at poles"""
@@ -122,4 +141,6 @@ if __name__ == '__main__':
     test_unit_conversion()
     test_poles()
     test_bad_lon()
+    test_ext_type()
+    test_many_coords()
     print 'successfully completed testing'

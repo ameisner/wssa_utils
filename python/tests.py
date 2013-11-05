@@ -78,6 +78,20 @@ def test_2d_coords():
 
 def test_2d_many():
     """lon and lat both 2d arrays, spread over multiple tiles"""
+    print test_2d_many.__doc__
+
+    racen = wssa_utils.com_tiles['RA'][114]
+    deccen = wssa_utils.com_tiles['DEC'][114]
+    nsam = 100
+    dist = 10.
+    ra = dist*(np.random.rand(nsam) - 0.5) + racen
+    dec = dist*(np.random.rand(nsam) - 0.5) + deccen
+    sh = (20, 5) # try non-square
+    ra = ra.reshape(sh)
+    dec = dec.reshape(sh)
+    vals = wssa_utils.w3_getval(ra, dec)
+    assert isinstance(vals, np.ndarray)
+    assert vals.shape == sh
 
 def test_bad_lon():
     """see if anything breaks when longitude outside of [0, 360)"""
@@ -159,4 +173,5 @@ if __name__ == '__main__':
     test_ext_type()
     test_many_coords()
     test_2d_coords()
+    test_2d_many()
     print 'successfully completed testing'

@@ -66,6 +66,10 @@ def test_bad_lon():
         assert isinstance(val, np.ndarray)
         assert val.dtype.name == 'float32'
         assert val.shape == (1,)
+        
+        tru = wssa_utils.w3_getval(np.array([(r+360.) % 360.]), dec)
+        tol = 1e-5
+        assert np.abs(val-tru) < tol
 
 def test_bad_lat():
     """see if anything breaks when latitude outside of [-90, 90]"""

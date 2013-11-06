@@ -27,6 +27,16 @@
 ;----------------------------------------------------------------------
 pro test_single_pair
 
+; test a single (lon, lat) pair
+
+  nsam = 1
+  coords = random_lonlat(nsam, /deg)
+  ra  = coords[0, *]
+  dec = coords[1, *]
+  val = w3_getval(ra, dec)
+  assert, (n_elements(val) EQ nsam)
+  assert, (size(val, /type) EQ 5)
+  
 end
 
 pro test_many_coords

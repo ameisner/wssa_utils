@@ -2,6 +2,12 @@
 pro/*~
 *~
 python/*~
+comp/*~
 
 ### compiled Python modules
 python/*.pyc
+comp/*.pyc
+
+### any testing detritus
+comp/*.fits
+comp/*.log

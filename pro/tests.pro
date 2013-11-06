@@ -41,6 +41,23 @@ end
 
 pro test_many_coords
 
+; lon and lat both 1d arrays, all within single tile
+
+  par = tile_par_struc(/large)
+  str = mrdfits(par.indexfile, 1)
+  racen  = str[114].ra
+  deccen = str[114].dec
+
+  nsam = 100
+  ra = randomu(seed, nsam) - 0.5 + racen
+  dec = randomu(seed, nsam) - 0.5 + deccen
+
+  vals = w3_getval(ra, dec)
+  assert, (n_elements(vals) EQ nsam)
+  assert, (size(vals, /type) EQ 5)
+  assert, (n_elements(size(val, /DIM)) EQ 1)
+  assert, ((size(vals, /DIM))[0] EQ nsam)
+
 end
 
 pro test_many_tiles

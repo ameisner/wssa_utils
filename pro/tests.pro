@@ -115,6 +115,27 @@ end
 
 pro test_2d_many
 
+; lon and lat both 2d arrays, spread over multiple tiles
+
+  par = tile_par_struc(/large)
+  str = mrdfits(par.indexfile, 1)
+  racen  = str[114].ra
+  deccen = str[114].dec
+
+  nsam = 100
+  dist = 10.
+  ra = dist*(randomu(seed, nsam) - 0.5) + racen
+  dec = dist*(randomu(seed, nsam) - 0.5) + deccen
+
+  sz = [20, 5] ; non-square
+  ra = reform(ra, sz[0], sz[1])
+  dec = reform(dec, sz[0], sz[1])
+
+  vals = w3_getval(ra, dec)
+  assert, (n_elements(vals) EQ n_elements(ra))
+  assert, (size(vals, /type) EQ 5)
+  assert, array_equal(size(vals, /DIM), sz)
+
 end
 
 pro test_bad_lon
@@ -146,5 +167,6 @@ pro tests
   test_many_tiles
   test_full_sky
   test_2d_coords
+  test_2d_many
 
 end

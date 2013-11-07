@@ -63,6 +63,7 @@ end
 pro test_many_tiles
 
   ; lon and lat both 1d arrays, spread over multiple tiles
+
   nsam = 10
   coords = random_lonlat(nsam, /deg)
   ra = coords[0, *]
@@ -76,6 +77,15 @@ pro test_many_tiles
 end
 
 pro test_full_sky
+
+; lon and lat at every nside=16 HEALPix pixel center
+
+  nside = 16
+  healgen_lb, nside, ra, dec
+  vals = w3_getval(ra, dec)
+  assert, (n_elements(vals) EQ n_elements(ra))
+  assert, (size(vals, /type) EQ 5)
+  assert, array_equal(size(vals, /DIM), size(ra, /DIM))
 
 end
 
@@ -114,5 +124,6 @@ pro tests
   test_single_pair
   test_many_coords
   test_many_tiles
+  test_full_sky
 
 end

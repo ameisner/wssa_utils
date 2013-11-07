@@ -157,6 +157,13 @@ end
 
 pro test_bad_lat
 
+; see if anything breaks when latitude outside of [-90, 90]
+
+  ra  = [  45.d,  45.d] ; arb
+  dec = [-100.d, 100.d]
+
+  vals = w3_getval(ra, dec)
+
 end
 
 pro test_ext_type

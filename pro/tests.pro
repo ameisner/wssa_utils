@@ -168,6 +168,22 @@ end
 
 pro test_ext_type
 
+; test that extension samples are of correct type, e.g. mask is integer
+
+  nsam = 1
+  coords = random_lonlat(nsam, /deg)
+  ra = coords[0, *]
+  dec = coords[1, *]
+
+  par = tile_par_struc(/large, release='1.0')
+  msk = par.ismsk
+  for ext=0, n_elements(msk)-1 do begin
+      if ~msk[ext] then continue
+      val = w3_getval(ra, dec, exten=ext)
+      assert, (n_elements(val) EQ nsam)
+      assert, (size(val, /type) EQ 3) ; long     
+  endfor
+
 end
 
 pro test_poles
@@ -186,7 +202,7 @@ end
 
 pro test_unit_conversion
 
-; test that conversion to to MJy/sr from DN happening when appropriate
+; test that conversion to MJy/sr from DN happening when appropriate
 
   nsam = 1
   coords = random_lonlat(nsam, /deg)
@@ -223,5 +239,6 @@ pro tests
   test_bad_lon
   test_poles
   test_unit_conversion
+  test_ext_type
 
 end

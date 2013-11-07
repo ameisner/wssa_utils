@@ -7,13 +7,11 @@ import os
 def coords2fits(x, y, outname, tnum=None):
     """write multi-extension fits file given arrays of x, y coordinates"""
     hdus = []
-    hdu_x = pyfits.PrimaryHDU(x)
-    hdu_y = pyfits.ImageHDU(y)
-    hdus.append(hdu_x)
-    hdus.append(hdu_y)
+    hdus.append(pyfits.PrimaryHDU(x))
+    hdus.append(pyfits.ImageHDU(y))
     if tnum is not None:
-        hdu_tnum = pyfits.ImageHDU(tnum)
-        hdus.append(hdu_tnum)
+        hdus.append(pyfits.ImageHDU(tnum))
+
     hdulist = pyfits.HDUList(hdus)
     hdulist.writeto(outname)
     

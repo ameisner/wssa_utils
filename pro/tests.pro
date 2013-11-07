@@ -78,7 +78,7 @@ end
 
 pro test_full_sky
 
-; lon and lat at every nside=16 HEALPix pixel center
+; lon, lat for every nside=16 HEALPix pixel center
 
   nside = 16
   healgen_lb, nside, ra, dec
@@ -90,6 +90,26 @@ pro test_full_sky
 end
 
 pro test_2d_coords
+
+; lon and lat both 2d arrays, all within single tile
+
+  par = tile_par_struc(/large)
+  str = mrdfits(par.indexfile, 1)
+  racen  = str[114].ra
+  deccen = str[114].dec
+
+  nsam = 100
+  ra = randomu(seed, nsam) - 0.5 + racen
+  dec = randomu(seed, nsam) - 0.5 + deccen
+
+  sz = [10, 10]
+  ra = reform(ra, sz[0], sz[1])
+  dec = reform(dec, sz[0], sz[1])
+
+  vals = w3_getval(ra, dec)
+  assert, (n_elements(vals) EQ n_elements(ra))
+  assert, (size(vals, /type) EQ 5)
+  assert, array_equal(size(vals, /DIM), sz)
 
 end
 
@@ -125,5 +145,6 @@ pro tests
   test_many_coords
   test_many_tiles
   test_full_sky
+  test_2d_coords
 
 end

@@ -140,6 +140,19 @@ end
 
 pro test_bad_lon
 
+; see if anything breaks when longitude outside of [0, 360)
+
+  tol = 1e-5
+  ra  = [-10.d, 370.d]
+  dec = [ 45.d,  45.d]
+
+  vals = w3_getval(ra, dec)
+  assert, (n_elements(vals) EQ n_elements(ra))
+  assert, (size(vals, /type) EQ 5)
+
+  tru = w3_getval((ra + 360.d) MOD 360, dec)
+  assert, (total(abs(tru-vals) GT tol) EQ 0)
+
 end
 
 pro test_bad_lat
@@ -168,5 +181,6 @@ pro tests
   test_full_sky
   test_2d_coords
   test_2d_many
+  test_bad_lon
 
 end

@@ -186,6 +186,28 @@ end
 
 pro test_unit_conversion
 
+; test that conversion to to MJy/sr from DN happening when appropriate
+
+  nsam = 1
+  coords = random_lonlat(nsam, /deg)
+
+  ra  = coords[0, *]
+  dec = coords[1, *]
+  val = w3_getval(ra, dec)
+  val_mjysr = w3_getval(ra, dec, /mjysr)
+  
+  assert, (n_elements(val_mjysr) EQ nsam)
+  assert, (size(val_mjysr, /type) EQ 5)
+
+  assert, (val[0] NE 0)
+
+  rat = val_mjysr[0]/val[0]
+  tol = 1e-5
+
+  par = tile_par_struc(/large)
+  tru = par.calfac
+  assert, (abs(rat-tru) LT tol)
+
 end
 
 pro tests
@@ -200,5 +222,6 @@ pro tests
   test_2d_many
   test_bad_lon
   test_poles
+  test_unit_conversion
 
 end

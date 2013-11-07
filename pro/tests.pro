@@ -172,6 +172,16 @@ end
 
 pro test_poles
 
+; see if anything breaks at poles
+
+  ra  = [  0.d,  0.d]
+  dec = [-90.d, 90.d]
+
+  vals = w3_getval(ra, dec)
+  assert, (n_elements(vals) EQ n_elements(ra))
+  assert, (size(vals, /type) EQ 5)
+  assert, (total(~finite(vals)) EQ 0)
+
 end
 
 pro test_unit_conversion
@@ -189,5 +199,6 @@ pro tests
   test_2d_coords
   test_2d_many
   test_bad_lon
+  test_poles
 
 end

@@ -62,6 +62,17 @@ end
 
 pro test_many_tiles
 
+  ; lon and lat both 1d arrays, spread over multiple tiles
+  nsam = 10
+  coords = random_lonlat(nsam, /deg)
+  ra = coords[0, *]
+  dec = coords[1, *]
+  vals = w3_getval(ra, dec)
+
+  assert, (n_elements(vals) EQ nsam)
+  assert, (size(vals, /type) EQ 5)
+  assert, array_equal(size(vals, /DIM), size(ra, /DIM))
+
 end
 
 pro test_full_sky
@@ -97,5 +108,11 @@ pro test_unit_conversion
 end
 
 pro tests
+
+; run unit tests
+
+  test_single_pair
+  test_many_coords
+  test_many_tiles
 
 end

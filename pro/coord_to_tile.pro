@@ -39,7 +39,8 @@ pro coord_to_tile, ra, dec, tnum, x=x, y=y, large=large
   COMMON PIXTILE, plist, tlist, nside
 
 ; ----- convert to HEALPix
-  ang2pix_ring, nside, (90.d - dec)/!radeg, ra/!radeg, pix
+  radeg = 180.d/!dpi
+  ang2pix_ring, nside, (90.d - dec)/radeg, ra/radeg, pix
   tnum = tlist[pix]
   delvarx, pix ; don't waste RAM
 
@@ -48,7 +49,6 @@ pro coord_to_tile, ra, dec, tnum, x=x, y=y, large=large
       init_tile_index
       COMMON TILES, _, ra0, dec0, __, ___, ____
       par = tile_par_struc(large=large)
-      radeg = 180.d/!dpi
       scale = (par.pix/par.sidelen)*radeg
       issa_proj_gnom, ra/radeg, dec/radeg, $ 
           ra0[tnum-1]/radeg, dec0[tnum-1]/radeg, scale, dx, dy

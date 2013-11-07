@@ -47,7 +47,7 @@ def test_many_tiles():
     assert vals.shape == (nsam,)
 
 def test_full_sky():
-    """lon and lat at every nside=16 HEALPix pixel center"""
+    """lon, lat for every nside=16 HEALPix pixel center"""
     print test_full_sky.__doc__
     
     nside = 16
@@ -97,16 +97,15 @@ def test_bad_lon():
     """see if anything breaks when longitude outside of [0, 360)"""
     print test_bad_lon.__doc__
 
+    tol = 1e-5
     dec = np.array([45.]) # arb
     for r in [-10., 370.]:
         ra = np.array([r])
         val = wssa_utils.w3_getval(ra, dec)
         assert isinstance(val, np.ndarray)
         assert val.dtype.name == 'float32'
-        assert val.shape == (1,)
-        
+        assert val.shape == (1,)        
         tru = wssa_utils.w3_getval(np.array([(r+360.) % 360.]), dec)
-        tol = 1e-5
         assert np.abs(val-tru) < tol
 
 def test_bad_lat():

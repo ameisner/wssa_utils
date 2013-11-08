@@ -18,7 +18,7 @@ def test_single_pair():
     ra, dec = random_lonlat(nsam, deg=True)
     val = wssa_utils.w3_getval(ra, dec)
     assert isinstance(val, np.ndarray)
-    assert val.dtype.name == 'float32'
+    assert val.dtype.name == 'float64'
     assert val.shape == (nsam,)
 
 def test_many_coords():
@@ -32,7 +32,7 @@ def test_many_coords():
     dec = np.random.rand(nsam) - 0.5 + deccen
     vals = wssa_utils.w3_getval(ra, dec)
     assert isinstance(vals, np.ndarray)
-    assert vals.dtype.name == 'float32'
+    assert vals.dtype.name == 'float64'
     assert vals.shape == (nsam,)
     
 def test_many_tiles():
@@ -43,7 +43,7 @@ def test_many_tiles():
     ra, dec = random_lonlat(nsam, deg=True)
     vals = wssa_utils.w3_getval(ra, dec)
     assert isinstance(vals, np.ndarray)
-    assert vals.dtype.name == 'float32'
+    assert vals.dtype.name == 'float64'
     assert vals.shape == (nsam,)
 
 def test_full_sky():
@@ -103,7 +103,7 @@ def test_bad_lon():
         ra = np.array([r])
         val = wssa_utils.w3_getval(ra, dec)
         assert isinstance(val, np.ndarray)
-        assert val.dtype.name == 'float32'
+        assert val.dtype.name == 'float64'
         assert val.shape == (1,)        
         tru = wssa_utils.w3_getval(np.array([(r+360.) % 360.]), dec)
         assert np.abs(val-tru) < tol
@@ -140,7 +140,7 @@ def test_poles():
         dec = np.array([d])
         val = wssa_utils.w3_getval(ra, dec)
         assert isinstance(val, np.ndarray)
-        assert val.dtype.name == 'float32'
+        assert val.dtype.name == 'float64'
         assert val[0] != 0
 
 def test_unit_conversion():
@@ -152,7 +152,7 @@ def test_unit_conversion():
     val = wssa_utils.w3_getval(ra, dec)
     val_mjysr = wssa_utils.w3_getval(ra, dec, mjysr=True)
     assert isinstance(val_mjysr, np.ndarray)
-    assert val_mjysr.dtype.name == 'float32'
+    assert val_mjysr.dtype.name == 'float64'
     assert val.shape == (nsam,)
     assert val[0] != 0
 

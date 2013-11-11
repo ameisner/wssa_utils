@@ -55,7 +55,7 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
       'wise_' + string(tnum[sind[bdy]], format='(I03)') + '.fits')
   if keyword_set(gz) then fname += '.gz'
 
-  vals = dblarr(nval) ; can debate float vs. double here later
+  vals = fltarr(nval)
   for i=0, nu-1 do begin
       indl = (i EQ 0) ? 0 : bdy[i-1] + 1
       indu = bdy[i]

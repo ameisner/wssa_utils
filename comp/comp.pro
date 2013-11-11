@@ -61,6 +61,21 @@ pro test_xy_rect, outname, fname=fname
 
 end
 
+pro test_vals_rect, outname, fname=fname
+
+; sample values for all ra, dec in rectangular grid
+
+  if ~keyword_set(fname) then fname = 'rect.fits'
+  fname = concat_dir('$WISE_DATA', fname)
+
+  ra  = readfits(fname)
+  dec = readfits(fname, ex=1)
+
+  vals = w3_getval(ra, dec)
+  writefits,  outname, vals
+
+end
+
 pro compare_xy_outputs, fpython, fidl
 
 ; check Python vs. IDL fits outputs for consistency

@@ -65,7 +65,7 @@ def tile_par_struc(large=True, release='1.0'):
     # conversion from factor from W3 DN to MJy/sr
     calfac = 0.0163402
     # data type for intensity and bit-mask outputs, respectively
-    dtype  = ['float64', 'int32']
+    dtype  = ['float32', 'int32']
 
     par = {'sidelen'   : sidelen,
            'pix'       : pix,
@@ -214,9 +214,9 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath='',
                   (np.round(xx)).astype('int')-xoffs]
         else:
             vals[sind[indl:indu]] = map_coordinates(subim,
-                                                    [yy-yoffs, xx-xoffs],
-                                                    order=1,
-                                                    cval=np.nan)
+                                                [(yy-yoffs).astype('float32'),
+                                                 (xx-xoffs).astype('float32')],
+                                                  order=1, cval=np.nan)
     return vals
 
 def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,

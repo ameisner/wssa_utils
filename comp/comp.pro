@@ -76,21 +76,21 @@ pro test_vals_rect, outname, fname=fname
 
 end
 
-pro compare_xy_outputs, fpython, fidl
+pro compare_outputs, fp, fi
 
 ; check Python vs. IDL fits outputs for consistency
 
-  print, 'python output in : ', fpython
-  print, 'IDL output in :', fidl
+  print, 'Python output in : ', fp
+  print, 'IDL output in :', fi
 
-  xp = readfits(fpython)
-  xi = readfits(fidl)
+  fits_info, fp, /silent, n_ext=n_ext
 
-  yp = readfits(fpython, ex=1)
-  yi = readfits(fidl, ex=1)
-
-  assert, (total(xi NE xp) EQ 0)
-  assert, (total(yi NE yp) EQ 0)
+  for exten=0, n_ext do begin
+      p = readfits(fp, ex=exten, /silent)
+      i = readfits(fi, ex=exten, /silent)
+      print, 'checking extension:', exten, ' , ', n_elements(p), ' values'
+      assert, (total(i NE p) EQ 0)
+  endfor
 
   print, 'comparison finished successfully'
 end

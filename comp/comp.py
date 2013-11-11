@@ -52,3 +52,12 @@ def test_xy_rect(outname, fname='rect.fits'):
 
     tnum, x, y = wssa_utils.coord_to_tile(ra, dec)
     coords2fits(x, y, outname, tnum=tnum)
+
+def test_vals_rect(outname, fname='rect.fits')
+    """sample values for all ra, dec in rectangular grid"""
+    fname = os.path.join(os.environ['WISE_DATA'], fname)
+    hdus = pyfits.open(fname)
+    ra  = hdus[0].data
+    dec = hdus[1].data
+
+    vals = wssa_utils.w3_getval(ra, dec)

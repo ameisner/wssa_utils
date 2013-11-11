@@ -60,3 +60,4 @@ def test_vals_rect(outname, fname='rect.fits'):
     dec = hdus[1].data
 
     vals = wssa_utils.w3_getval(ra, dec)
+    arrs2fits(outname, vals)

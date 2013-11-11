@@ -4,13 +4,12 @@ import wssa_utils
 import healpy
 import os
 
-def coords2fits(x, y, outname, tnum=None):
+def coords2fits(outname, *arrs):
     """write multi-extension fits file given arrays of x, y coordinates"""
     hdus = []
-    hdus.append(pyfits.PrimaryHDU(x))
-    hdus.append(pyfits.ImageHDU(y))
-    if tnum is not None:
-        hdus.append(pyfits.ImageHDU(tnum))
+    for i, arr in enumerate(arrs):
+        hdus.append(pyfits.ImageHDU(arr) if i is not 0 else
+                    pyfits.PrimaryHDU(arr))
 
     hdulist = pyfits.HDUList(hdus)
     hdulist.writeto(outname)
@@ -21,7 +20,7 @@ def test_xy_single(outname):
     ra = np.array([308.49839])
     dec = np.array([-30.757660])
     _, x, y = wssa_utils.coord_to_tile(ra, dec)
-    coords2fits(x, y, outname)
+    coords2fits(outname, x, y)
 
 def test_xy_many(outname):
     """convert more than one lon, lat pair to x,y with coord_to_tile"""
@@ -30,7 +29,7 @@ def test_xy_many(outname):
     dec = np.array([9.6944888, 25.149593, -29.273778, 11.994469, 43.651411,
                     -10.985369])
     _, x, y = wssa_utils.coord_to_tile(ra, dec)
-    coords2fits(x, y, outname)
+    coords2fits(outname, x, y)
 
 def test_xy_heal(outname):
     """convert all HEALPix nside = 16 pixel centers to tile x, y"""
@@ -41,7 +40,7 @@ def test_xy_heal(outname):
     ra = (180./np.pi)*phi
     dec = 90. - (180./np.pi)*theta
     tnum, x, y = wssa_utils.coord_to_tile(ra, dec)
-    coords2fits(x, y, outname, tnum=tnum)
+    coords2fits(outname, x, y, tnum)
 
 def test_xy_rect(outname, fname='rect.fits'):
     """convert all ra, dec in rectangular grid to tile x, y"""
@@ -51,7 +50,7 @@ def test_xy_rect(outname, fname='rect.fits'):
     dec = hdus[1].data
 
     tnum, x, y = wssa_utils.coord_to_tile(ra, dec)
-    coords2fits(x, y, outname, tnum=tnum)
+    coords2fits(outname, x, y, tnum)
 
 def test_vals_rect(outname, fname='rect.fits'):
     """sample values for all ra, dec in rectangular grid"""

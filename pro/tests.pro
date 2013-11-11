@@ -35,7 +35,7 @@ pro test_single_pair
   dec = coords[1, *]
   val = w3_getval(ra, dec)
   assert, (n_elements(val) EQ nsam)
-  assert, (size(val, /type) EQ 5)
+  assert, (size(val, /type) EQ 4)
   
 end
 
@@ -54,7 +54,7 @@ pro test_many_coords
 
   vals = w3_getval(ra, dec)
   assert, (n_elements(vals) EQ nsam)
-  assert, (size(vals, /type) EQ 5)
+  assert, (size(vals, /type) EQ 4)
   assert, (n_elements(size(val, /DIM)) EQ 1)
   assert, ((size(vals, /DIM))[0] EQ nsam)
 
@@ -71,7 +71,7 @@ pro test_many_tiles
   vals = w3_getval(ra, dec)
 
   assert, (n_elements(vals) EQ nsam)
-  assert, (size(vals, /type) EQ 5)
+  assert, (size(vals, /type) EQ 4)
   assert, array_equal(size(vals, /DIM), size(ra, /DIM))
 
 end
@@ -84,7 +84,7 @@ pro test_full_sky
   healgen_lb, nside, ra, dec
   vals = w3_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
-  assert, (size(vals, /type) EQ 5)
+  assert, (size(vals, /type) EQ 4)
   assert, array_equal(size(vals, /DIM), size(ra, /DIM))
 
 end
@@ -108,7 +108,7 @@ pro test_2d_coords
 
   vals = w3_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
-  assert, (size(vals, /type) EQ 5)
+  assert, (size(vals, /type) EQ 4)
   assert, array_equal(size(vals, /DIM), sz)
 
 end
@@ -133,7 +133,7 @@ pro test_2d_many
 
   vals = w3_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
-  assert, (size(vals, /type) EQ 5)
+  assert, (size(vals, /type) EQ 4)
   assert, array_equal(size(vals, /DIM), sz)
 
 end
@@ -148,7 +148,7 @@ pro test_bad_lon
 
   vals = w3_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
-  assert, (size(vals, /type) EQ 5)
+  assert, (size(vals, /type) EQ 4)
 
   tru = w3_getval((ra + 360.d) MOD 360, dec)
   assert, (total(abs(tru-vals) GT tol) EQ 0)
@@ -195,7 +195,7 @@ pro test_poles
 
   vals = w3_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
-  assert, (size(vals, /type) EQ 5)
+  assert, (size(vals, /type) EQ 4)
   assert, (total(~finite(vals)) EQ 0)
 
 end
@@ -213,7 +213,7 @@ pro test_unit_conversion
   val_mjysr = w3_getval(ra, dec, /mjysr)
   
   assert, (n_elements(val_mjysr) EQ nsam)
-  assert, (size(val_mjysr, /type) EQ 5)
+  assert, (size(val_mjysr, /type) EQ 4)
 
   assert, (val[0] NE 0)
 

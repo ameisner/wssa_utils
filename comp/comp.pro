@@ -89,6 +89,21 @@ pro test_val_float, outname
 
 end
 
+pro test_vals_float, outname
+
+  ra  = [228.06533d, 336.88487d,  132.85047d, 296.63675d, 174.24343d, $ 
+          304.68113d]
+  dec = [9.6944888d, 25.149593d, -29.273778d, 11.994469d, 43.651411d, $ 
+         -10.985369d]
+
+  ra  = float(ra)
+  dec = float(dec)
+
+  vals = w3_getval(ra, dec)
+  writefits, outname, vals
+
+end
+
 pro compare_outputs, fp, fi
 
 ; check Python vs. IDL fits outputs for consistency

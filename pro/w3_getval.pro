@@ -55,6 +55,9 @@ function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
 ; ----- don't try to interpolate off of SFD extension
   if exten EQ string_to_ext('sfd') then return, -1
 
+  ra = double(ra)
+  dec = double(dec)
+
   coord_to_tile, ra, dec, tnum, x=x, y=y, large=large
   vals = tile_val_interp(tnum, x, y, exten=exten, tpath=tilepath, $ 
       release=release, large=large, gz=gz)

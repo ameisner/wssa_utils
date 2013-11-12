@@ -216,7 +216,7 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath='',
             vals[sind[indl:indu]] = map_coordinates(subim,
                                                 [(yy-yoffs).astype('float32'),
                                                  (xx-xoffs).astype('float32')],
-                                                  order=1, cval=np.nan)
+                                                  order=1, mode='nearest')
     return vals
 
 def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,

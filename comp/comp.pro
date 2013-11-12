@@ -78,6 +78,8 @@ end
 
 pro test_val_float, outname
 
+; get tile value for one lon, lat pair
+
   ra  = [ 308.49839d]
   dec = [-30.757660d]
 
@@ -90,6 +92,8 @@ pro test_val_float, outname
 end
 
 pro test_vals_float, outname
+
+; get tile values more than one lon, lat pair
 
   ra  = [228.06533d, 336.88487d,  132.85047d, 296.63675d, 174.24343d, $ 
           304.68113d]

@@ -5,7 +5,7 @@ import healpy
 import os
 
 def arrs2fits(outname, *arrs):
-    """write multi-extension fits file given arrays of x, y coordinates"""
+    """write multi-extension fits file with input arrays as image extensions"""
     hdus = []
     for i, arr in enumerate(arrs):
         hdus.append(pyfits.ImageHDU(arr) if i is not 0 else
@@ -52,6 +52,7 @@ def test_xy_rect(outname, fname='rect.fits'):
     arrs2fits(outname, x, y, tnum)
 
 def test_val_float(outname):
+    """get tile value for one lon, lat pair"""
     ra = np.array([308.49839])
     dec = np.array([-30.757660])
 
@@ -62,6 +63,7 @@ def test_val_float(outname):
     arrs2fits(outname, val)
 
 def test_vals_float(outname):
+    """get tile values more than one lon, lat pair"""
     ra  = np.array([228.06533, 336.88487,  132.85047, 296.63675, 174.24343,
                      304.68113])
     dec = np.array([9.6944888, 25.149593, -29.273778, 11.994469, 43.651411,

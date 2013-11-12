@@ -61,6 +61,17 @@ def test_val_float(outname):
     val = wssa_utils.w3_getval(ra, dec)
     arrs2fits(outname, val)
 
+def test_vals_float(outname):
+    ra  = np.array([228.06533, 336.88487,  132.85047, 296.63675, 174.24343,
+                     304.68113])
+    dec = np.array([9.6944888, 25.149593, -29.273778, 11.994469, 43.651411,
+                    -10.985369])  
+    ra  = ra.astype('float32')
+    dec = dec.astype('float32')
+
+    vals = wssa_utils.w3_getval(ra, dec)
+    arrs2fits(outname, vals)
+
 def test_vals_rect(outname, fname='rect.fits'):
     """sample values for all ra, dec in rectangular grid"""
     fname = os.path.join(os.environ['WISE_DATA'], fname)

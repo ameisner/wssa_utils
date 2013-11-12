@@ -73,6 +73,21 @@ def test_vals_float(outname):
 
     vals = wssa_utils.w3_getval(ra, dec)
     arrs2fits(outname, vals)
+    
+def test_edge_interp(outname):
+  """
+  engineer extreme test cases for interpolation near or off of tile edges
+  such cases may never actually arise when running w3_getval
+  """
+
+  x = np.array([-0.23647])
+  y = np.array([ 4190.14])
+  tnum = np.array([115])
+  par = wssa_utils.tile_par_struc()
+  tpath = par['tpath']
+  val = wssa_utils.tile_interp_val(tnum, x, y, large=True, release='1.0',
+                                   tpath=tpath)
+  arrs2fits(outname, val)
 
 def test_vals_rect(outname, fname='rect.fits'):
     """sample values for all ra, dec in rectangular grid"""

@@ -108,6 +108,19 @@ pro test_vals_float, outname
 
 end
 
+pro test_edge_interp, outname
+
+; engineer extreme test cases for interpolation near or off of tile edges
+; such cases may never actually arise when running w3_getval
+
+  x = -0.23647d
+  y = 4190.14d
+  tnum = 115
+  val = tile_val_interp(tnum, x, y, /large, release='1.0')
+
+  writefits, outname, val
+end
+
 pro compare_outputs, fp, fi
 
 ; check Python vs. IDL fits outputs for consistency

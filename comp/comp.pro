@@ -76,6 +76,19 @@ pro test_vals_rect, outname, fname=fname
 
 end
 
+pro test_val_float, outname
+
+  ra  = [ 308.49839d]
+  dec = [-30.757660d]
+
+  ra  = float(ra)
+  dec = float(dec)
+
+  val = w3_getval(ra, dec)
+  writefits, outname, val
+
+end
+
 pro compare_outputs, fp, fi
 
 ; check Python vs. IDL fits outputs for consistency

@@ -13,7 +13,6 @@ def arrs2fits(outname, *arrs):
 
     hdulist = pyfits.HDUList(hdus)
     hdulist.writeto(outname)
-    
 
 def test_xy_single(outname):
     """convert one lon, lat pair to x, y with coord_to_tile"""
@@ -51,6 +50,16 @@ def test_xy_rect(outname, fname='rect.fits'):
 
     tnum, x, y = wssa_utils.coord_to_tile(ra, dec)
     arrs2fits(outname, x, y, tnum)
+
+def test_val_float(outname):
+    ra = np.array([308.49839])
+    dec = np.array([-30.757660])
+
+    ra  = ra.astype('float32')
+    dec = dec.astype('float32')
+
+    val = wssa_utils.w3_getval(ra, dec)
+    arrs2fits(outname, val)
 
 def test_vals_rect(outname, fname='rect.fits'):
     """sample values for all ra, dec in rectangular grid"""

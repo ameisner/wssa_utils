@@ -3,7 +3,7 @@
 import os
 import numpy as np
 import pyfits
-import healpy
+from ang2pix_ring import ang2pix_ring
 from scipy.ndimage import map_coordinates
 
 # global variables
@@ -127,7 +127,7 @@ def coord_to_tile(ra, dec, large=True):
         y     - array of y coordinates within each tile
     """
 
-    pix = healpy.ang2pix(com_pix_tile['NSIDE'], (90.-dec)/radeg, ra/radeg)
+    pix = ang2pix_ring(com_pix_tile['NSIDE'], (90.-dec)/radeg, ra/radeg)
     tlist = (com_pix_tile['TILE'])[pix]
     del pix
     par = tile_par_struc(large=large)

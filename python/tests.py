@@ -6,7 +6,7 @@ Unit tests, will eventually repurpose for use with nose.
 # if these imports fail, you're already in trouble
 import pyfits
 import numpy as np
-import healpy
+from pix2ang_ring import pix2ang_ring
 import wssa_utils
 from random_lonlat import random_lonlat
 
@@ -51,9 +51,9 @@ def test_full_sky():
     print test_full_sky.__doc__
     
     nside = 16
-    npix = healpy.pixelfunc.nside2npix(nside)
+    npix = 12*(nside**2)
     pix = np.arange(npix)
-    theta, phi = healpy.pixelfunc.pix2ang(nside, pix)
+    theta, phi = pix2ang_ring(nside, pix)
     ra = (180./np.pi)*phi
     dec = 90. - (180./np.pi)*theta
     vals = wssa_utils.w3_getval(ra, dec)

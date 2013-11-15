@@ -26,13 +26,13 @@ pro test_xy_many, outname
 
 end
 
-pro test_xy_heal, outname
+pro test_xy_heal, outname, nside=nside
 
-; convert all HEALPix nside = 16 pixel centers to tile x, y
+; convert all HEALPix pixel centers to tile x, y
 
-  nside = 16
+  if ~keyword_set(nside) then nside = 16
 
-  pix2ang_ring, 16, lindgen(12L*16*16), theta, phi
+  pix2ang_ring, nside, lindgen(12L*nside*nside), theta, phi
   radeg = (180.d/!dpi)
   ra = phi*radeg
   dec = 90.d - radeg*theta

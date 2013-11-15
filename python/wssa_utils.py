@@ -179,8 +179,7 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath='',
     """
 
     par = tile_par_struc(large=large, release=release)
-    if isinstance(exten, str):
-        exten = (par['extens'])[exten]
+    exten = (exten if isinstance(exten, int) else par['extens'][exten])
     if tpath == '':
         tpath = par['tpath']
     nval = len(tnum.flat)
@@ -263,7 +262,8 @@ def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
                            release=release, large=large, gz=gz)
 
     par = tile_par_struc(release=release, large=large)
-    mask = (par['ismsk'])[exten]
+    mask = (par['ismsk'])[exten if isinstance(exten, int) else
+                          par['extens'][exten]]
 
     if mjysr and not mask:
         vals *= par['calfac']

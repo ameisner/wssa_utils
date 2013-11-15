@@ -226,6 +226,22 @@ pro test_unit_conversion
 
 end
 
+pro test_tilepath, tilepath=tilepath
+
+; try non-default tile path
+
+  if ~keyword_set(tilepath) then tilepath = '/n/fink1/ameisner/tile-combine-8k'
+  print, 'tilepath : ' + tilepath
+
+  nsam = 10
+  coords = random_lonlat(nsam, /deg)
+  ra  = coords[0, *]
+  dec = coords[1, *]
+  val = w3_getval(ra, dec, tilepath=tilepath)
+  assert, (n_elements(val) EQ nsam)
+
+end
+
 pro tests
 
 ; run unit tests
@@ -240,5 +256,6 @@ pro tests
   test_poles
   test_unit_conversion
   test_ext_type
+  test_tilepath
 
 end

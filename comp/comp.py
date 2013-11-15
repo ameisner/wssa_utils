@@ -1,7 +1,7 @@
 import numpy as np
 import pyfits
 import wssa_utils
-import healpy
+from pix2ang_ring import pix2ang_ring
 import os
 
 def arrs2fits(outname, *arrs):
@@ -33,9 +33,9 @@ def test_xy_many(outname):
 def test_xy_heal(outname):
     """convert all HEALPix nside = 16 pixel centers to tile x, y"""
     nside = 16
-    npix = healpy.pixelfunc.nside2npix(nside)
+    npix = 12*nside*nside
     pix = np.arange(npix)
-    theta, phi = healpy.pixelfunc.pix2ang(nside, pix)
+    theta, phi = pix2ang_ring(nside, pix)
     ra = (180./np.pi)*phi
     dec = 90. - (180./np.pi)*theta
     tnum, x, y = wssa_utils.coord_to_tile(ra, dec)

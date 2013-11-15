@@ -113,12 +113,14 @@ pro test_edge_interp, outname
 ; engineer extreme test cases for interpolation near or off of tile edges
 ; such cases may never actually arise when running w3_getval
 
-  x = -0.23647d
-  y = 4190.14d
-  tnum = 115
-  val = tile_val_interp(tnum, x, y, /large, release='1.0')
+  x = [-0.23647d, -1.0d, -10.5d, 0.d,    1619.25d, 7999.5d, 8000.d, 2893.81d]
+  y = [ 4190.14d, -1.0d, -5.5d , 0.d, -0.0952951d, 7999.5d, 8000.d,  8000.5d]
+  nsam = n_elements(x)
+  tnum = replicate(115, nsam)
+  vals = tile_val_interp(tnum, x, y, /large, release='1.0')
 
-  writefits, outname, val
+  writefits, outname, vals
+
 end
 
 pro compare_outputs, fp, fi

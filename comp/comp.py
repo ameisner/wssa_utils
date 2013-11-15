@@ -90,12 +90,12 @@ def test_edge_interp(outname):
                                       tpath=tpath)
     arrs2fits(outname, vals)
 
-def test_vals_rect(outname, fname='rect.fits'):
+def test_vals_rect(outname, fname='rect.fits', exten=0):
     """sample values for all ra, dec in rectangular grid"""
     fname = os.path.join(os.environ['WISE_DATA'], fname)
     hdus = pyfits.open(fname)
     ra  = hdus[0].data
     dec = hdus[1].data
 
-    vals = wssa_utils.w3_getval(ra, dec)
+    vals = wssa_utils.w3_getval(ra, dec, exten=exten)
     arrs2fits(outname, vals)

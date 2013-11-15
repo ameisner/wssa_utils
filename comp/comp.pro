@@ -61,17 +61,18 @@ pro test_xy_rect, outname, fname=fname
 
 end
 
-pro test_vals_rect, outname, fname=fname
+pro test_vals_rect, outname, fname=fname, exten=exten
 
 ; sample values for all ra, dec in rectangular grid
 
   if ~keyword_set(fname) then fname = 'rect.fits'
+  if ~keyword_set(exten) then exten = 0
   fname = concat_dir('$WISE_DATA', fname)
 
   ra  = readfits(fname)
   dec = readfits(fname, ex=1)
 
-  vals = w3_getval(ra, dec)
+  vals = w3_getval(ra, dec, exten=exten)
   writefits,  outname, vals
 
 end

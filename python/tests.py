@@ -161,8 +161,17 @@ def test_unit_conversion():
     tru = wssa_utils.tile_par_struc()['calfac']
     assert np.abs(rat-tru) < tol
 
+def test_tilepath(tilepath='/n/fink1/ameisner/tile-combine-8k'):
+    """try non-default tile path"""
+    print test_tilepath.__doc__, ': '+tilepath
+    
+    nsam = 1
+    ra, dec = random_lonlat(nsam, deg=True)
+    val = wssa_utils.w3_getval(ra, dec, tilepath=tilepath)
+    assert isinstance(val, np.ndarray)
+    assert val.shape == (nsam,)
+    
 if __name__ == '__main__':
-# eventually need to allow tilepath as keyword argument somehow
     """run the above tests"""
     test_single_pair()
     test_many_tiles()
@@ -173,4 +182,5 @@ if __name__ == '__main__':
     test_many_coords()
     test_2d_coords()
     test_2d_many()
+    test_tilepath()
     print 'successfully completed testing'

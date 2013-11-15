@@ -30,9 +30,8 @@ def test_xy_many(outname):
     _, x, y = wssa_utils.coord_to_tile(ra, dec)
     arrs2fits(outname, x, y)
 
-def test_xy_heal(outname):
-    """convert all HEALPix nside = 16 pixel centers to tile x, y"""
-    nside = 16
+def test_xy_heal(outname, nside=16):
+    """convert all HEALPix pixel centers to tile x, y"""
     npix = 12*nside*nside
     pix = np.arange(npix)
     theta, phi = pix2ang_ring(nside, pix)
@@ -79,7 +78,6 @@ def test_edge_interp(outname):
     engineer extreme test cases for interpolation near or off of tile edges
     such cases may never actually arise when running w3_getval
     """
-
     x = np.array([-0.23647])
     y = np.array([ 4190.14])
     tnum = np.array([115])

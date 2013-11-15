@@ -60,8 +60,7 @@ def tile_par_struc(large=True, release='1.0'):
     # number of tiles, don't want random 430's all over my code
     ntile  = 430
     # default tile path
-    tpath  = '/n/fink1/ameisner/tile-combine' if large else \
-             '/n/fink1/ameisner/tile-planck-zp'
+    tpath  = os.environ['WISE_TILE']
     # conversion from factor from W3 DN to MJy/sr
     calfac = 0.0163402
     # data type for intensity and bit-mask outputs, respectively
@@ -157,8 +156,8 @@ def uniq(arr):
     u = arr[bdy]
     return u, bdy
 
-def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath='',
-                    gz=False):
+def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0',
+                    tpath=tile_par_struc()['tpath'], gz=False):
     """
     Use (x,y) pairs and tile numbers to sample values from WSSA tiles.
 
@@ -180,8 +179,6 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath='',
 
     par = tile_par_struc(large=large, release=release)
     exten = (exten if isinstance(exten, int) else par['extens'][exten])
-    if tpath == '':
-        tpath = par['tpath']
     nval = len(tnum.flat)
     sind = np.argsort(tnum)
     tu, bdy = uniq(tnum[sind])
@@ -218,8 +215,8 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0', tpath='',
                                                   order=1, mode='nearest')
     return vals
 
-def w3_getval(ra, dec, exten=0, tilepath='', release='1.0', large=True,
-              mjysr=False, gz=False):
+def w3_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
+              release='1.0', large=True, mjysr=False, gz=False):
     """
     Sample values from WSSA tiles at specified celestial coordinates.
 

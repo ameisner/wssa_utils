@@ -58,7 +58,7 @@ def test_val_float(outname):
     ra  = ra.astype('float32')
     dec = dec.astype('float32')
 
-    val = wssa_utils.w3_getval(ra, dec)
+    val = wssa_utils.wssa_getval(ra, dec)
     arrs2fits(outname, val)
 
 def test_vals_float(outname):
@@ -70,13 +70,13 @@ def test_vals_float(outname):
     ra  = ra.astype('float32')
     dec = dec.astype('float32')
 
-    vals = wssa_utils.w3_getval(ra, dec)
+    vals = wssa_utils.wssa_getval(ra, dec)
     arrs2fits(outname, vals)
     
 def test_edge_interp(outname):
     """
     engineer extreme test cases for interpolation near or off of tile edges
-    such cases may never actually arise when running w3_getval
+    such cases may never actually arise when running wssa_getval
     """
     x = np.array([-0.23647, -1.0, -10.5, 0.,    1619.25, 7999.5, 8000.,
                   2893.81])
@@ -97,7 +97,7 @@ def test_vals_rect(outname, fname='rect.fits', exten=0):
     ra  = hdus[0].data
     dec = hdus[1].data
 
-    vals = wssa_utils.w3_getval(ra, dec, exten=exten)
+    vals = wssa_utils.wssa_getval(ra, dec, exten=exten)
     arrs2fits(outname, vals)
 
 def test_vals_mjysr(outname):
@@ -107,5 +107,5 @@ def test_vals_mjysr(outname):
     dec = np.array([9.6944888, 25.149593, -29.273778, 11.994469, 43.651411,
                     -10.985369])
 
-    vals = wssa_utils.w3_getval(ra, dec, mjysr=True)
+    vals = wssa_utils.wssa_getval(ra, dec, mjysr=True)
     arrs2fits(outname, vals)

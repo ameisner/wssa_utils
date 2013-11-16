@@ -213,8 +213,8 @@ def check_coords(ra, dec):
     good = (ra.shape == dec.shape) & (np.max(np.abs(dec)) <= 90)
     return good, ra, dec
 
-def w3_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
-              release='1.0', large=True, mjysr=False, gz=False):
+def wssa_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
+                release='1.0', large=True, mjysr=False, gz=False):
     """
     Sample values from WSSA tiles at specified celestial coordinates.
 

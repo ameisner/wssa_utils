@@ -16,7 +16,7 @@ def test_single_pair():
 
     nsam = 1
     ra, dec = random_lonlat(nsam, deg=True)
-    val = wssa_utils.w3_getval(ra, dec)
+    val = wssa_utils.wssa_getval(ra, dec)
     assert isinstance(val, np.ndarray)
     assert val.dtype.name == 'float32'
     assert val.shape == (nsam,)
@@ -30,7 +30,7 @@ def test_many_coords():
     nsam = 100
     ra = np.random.rand(nsam) - 0.5 + racen
     dec = np.random.rand(nsam) - 0.5 + deccen
-    vals = wssa_utils.w3_getval(ra, dec)
+    vals = wssa_utils.wssa_getval(ra, dec)
     assert isinstance(vals, np.ndarray)
     assert vals.dtype.name == 'float32'
     assert vals.shape == (nsam,)
@@ -41,7 +41,7 @@ def test_many_tiles():
     
     nsam = 10
     ra, dec = random_lonlat(nsam, deg=True)
-    vals = wssa_utils.w3_getval(ra, dec)
+    vals = wssa_utils.wssa_getval(ra, dec)
     assert isinstance(vals, np.ndarray)
     assert vals.dtype.name == 'float32'
     assert vals.shape == (nsam,)
@@ -56,7 +56,7 @@ def test_full_sky():
     theta, phi = pix2ang_ring(nside, pix)
     ra = (180./np.pi)*phi
     dec = 90. - (180./np.pi)*theta
-    vals = wssa_utils.w3_getval(ra, dec)
+    vals = wssa_utils.wssa_getval(ra, dec)
     assert isinstance(vals, np.ndarray)
     assert vals.shape == (npix,)
 
@@ -72,7 +72,7 @@ def test_2d_coords():
     sh = (10, 10)
     ra = ra.reshape(sh)
     dec = dec.reshape(sh)
-    vals = wssa_utils.w3_getval(ra, dec)
+    vals = wssa_utils.wssa_getval(ra, dec)
     assert isinstance(vals, np.ndarray)
     assert vals.shape == sh
 
@@ -89,7 +89,7 @@ def test_2d_many():
     sh = (20, 5) # try non-square
     ra = ra.reshape(sh)
     dec = dec.reshape(sh)
-    vals = wssa_utils.w3_getval(ra, dec)
+    vals = wssa_utils.wssa_getval(ra, dec)
     assert isinstance(vals, np.ndarray)
     assert vals.shape == sh
 
@@ -101,11 +101,11 @@ def test_bad_lon():
     dec = np.array([45.]) # arb
     for r in [-10., 370.]:
         ra = np.array([r])
-        val = wssa_utils.w3_getval(ra, dec)
+        val = wssa_utils.wssa_getval(ra, dec)
         assert isinstance(val, np.ndarray)
         assert val.dtype.name == 'float32'
         assert val.shape == (1,)        
-        tru = wssa_utils.w3_getval(np.array([(r+360.) % 360.]), dec)
+        tru = wssa_utils.wssa_getval(np.array([(r+360.) % 360.]), dec)
         assert np.abs(val-tru) < tol
 
 def test_bad_lat():
@@ -116,7 +116,7 @@ def test_bad_lat():
     # just see if this runs without crashing ...
     for d in [-100., 100.]:
         dec = np.array([d])
-        val = wssa_utils.w3_getval(ra, dec)
+        val = wssa_utils.wssa_getval(ra, dec)
         assert (val == -1)
 
 def test_ext_type():
@@ -128,7 +128,7 @@ def test_ext_type():
     msk = wssa_utils.tile_par_struc()['ismsk']
     for ext, ismsk in enumerate(msk):
         if not ismsk: continue
-        val = wssa_utils.w3_getval(ra, dec, exten=ext)
+        val = wssa_utils.wssa_getval(ra, dec, exten=ext)
         assert isinstance(val, np.ndarray)
         assert val.dtype.name == 'int32'
 
@@ -139,7 +139,7 @@ def test_poles():
     ra = np.array([0.])
     for d in [-90., 90.]:
         dec = np.array([d])
-        val = wssa_utils.w3_getval(ra, dec)
+        val = wssa_utils.wssa_getval(ra, dec)
         assert isinstance(val, np.ndarray)
         assert val.dtype.name == 'float32'
         assert val[0] != 0
@@ -150,8 +150,8 @@ def test_unit_conversion():
 
     nsam = 1
     ra, dec = random_lonlat(nsam, deg=True)
-    val = wssa_utils.w3_getval(ra, dec)
-    val_mjysr = wssa_utils.w3_getval(ra, dec, mjysr=True)
+    val = wssa_utils.wssa_getval(ra, dec)
+    val_mjysr = wssa_utils.wssa_getval(ra, dec, mjysr=True)
     assert isinstance(val_mjysr, np.ndarray)
     assert val_mjysr.dtype.name == 'float32'
     assert val.shape == (nsam,)
@@ -168,7 +168,7 @@ def test_tilepath(tilepath='/n/fink1/ameisner/tile-combine-8k'):
     
     nsam = 1
     ra, dec = random_lonlat(nsam, deg=True)
-    val = wssa_utils.w3_getval(ra, dec, tilepath=tilepath)
+    val = wssa_utils.wssa_getval(ra, dec, tilepath=tilepath)
     assert isinstance(val, np.ndarray)
     assert val.shape == (nsam,)
     

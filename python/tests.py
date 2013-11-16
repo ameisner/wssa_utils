@@ -117,6 +117,7 @@ def test_bad_lat():
     for d in [-100., 100.]:
         dec = np.array([d])
         val = wssa_utils.w3_getval(ra, dec)
+        assert (val == -1)
 
 def test_ext_type():
     """test that extension samples are of correct type, e.g. mask is integer"""
@@ -183,4 +184,5 @@ if __name__ == '__main__':
     test_2d_coords()
     test_2d_many()
     test_tilepath()
+    test_bad_lat()
     print 'successfully completed testing'

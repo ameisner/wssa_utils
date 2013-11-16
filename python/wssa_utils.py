@@ -204,6 +204,15 @@ def tile_val_interp(tnum, x, y, large=True, exten=0, release='1.0',
                                                   order=1, mode='nearest')
     return vals
 
+def check_coords(ra, dec):
+    """Attempt to ensure ra, dec are numpy arrays, sanity check coordinates"""
+    try:
+        ra, dec = np.atleast_1d(ra, dec)
+    except:
+        return False, ra, dec
+    good = (ra.shape == dec.shape) & (np.max(np.abs(dec)) <= 90)
+    return good, ra, dec
+
 def w3_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
               release='1.0', large=True, mjysr=False, gz=False):
     """
@@ -233,8 +242,8 @@ def w3_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
         vals - values at (ra, dec) sampled from  WSSA tiles
     """
 
-    if not isinstance(ra, np.ndarray):
-        raise TypeError("Input coordinates must be of type numpy.ndarray")
+    sane, ra, dec = check_coords(ra, dec)
+    if not sane: return -1
 
     ra = ra.astype('float64')
     dec = dec.astype('float64')

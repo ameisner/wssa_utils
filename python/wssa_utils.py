@@ -17,7 +17,7 @@ def tile_par_struc(large=True, release='1.0'):
 
     Keyword Inputs:
         large   - set for 8k x 8k tiles, default is 3k x 3k
-        release - for now 'dev' or '1.0', '1.0' is default
+        release - default '1.0', currently only release = '1.0' supported
     """
 
     # tile sidelength, degrees
@@ -34,29 +34,18 @@ def tile_par_struc(large=True, release='1.0'):
     # file containing HEALPix -> tile lookup table
     lookup = os.path.join(os.environ['WISE_DATA'], 'pixel_lookup.fits')
 
-    # extension names, clean this up later, for now useful to see list
-    if release == 'dev':
-        extens = {'clean' : 0,
-                  'dirt'  : 1,
-                  'cov'   : 2,
-                  'sfd'   : 3,
-                  'min'   : 4,
-                  'max'   : 5,
-                  'amsk'  : 6,
-                  'omsk'  : 7,
-                  'art'   : 8 }
-    else:
-        extens = {'clean' : 0,
-                  'dirt'  : 1,
-                  'cov'   : 2,
-                  'min'   : 3,
-                  'max'   : 4,
-                  'amsk'  : 5,
-                  'omsk'  : 6,
-                  'art'   : 7 }
+    # tile extension names
+    extens = {'clean' : 0,
+              'dirt'  : 1,
+              'cov'   : 2,
+              'min'   : 3,
+              'max'   : 4,
+              'amsk'  : 5,
+              'omsk'  : 6,
+              'art'   : 7 }
 
     # boolean indicating whether each extension should be treated as a bit-mask
-    ismsk  = ([0,0,0,0,0,0,1,1,0] if (release == 'dev') else [0,0,0,0,0,1,1,])
+    ismsk  = [0,0,0,0,0,1,1,0]
     # number of tiles, don't want random 430's all over my code
     ntile  = 430
     # default tile path
@@ -170,7 +159,7 @@ def tile_val_interp(tnum, x, y, large=True, exten=0, release='1.0',
         large    - set for 8k x 8k tiles, default is 3k x 3k
         exten    - fits extension, default to 0, currently implemented
                    only for scalar exten values
-        release  - for now 'dev' or '1.0', '1.0' is default
+        release  - default '1.0', currently only release = '1.0' supported
         large    - set for 8k x 8k tiles, default is 3k x 3k
 
     Outputs:
@@ -226,7 +215,7 @@ def w3_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
 
     Keyword inputs:
         exten - extension, either as an integer or string, acceptable
-                values depend on release, but for release='1.0':
+                values for release='1.0':
                     0: 'clean'
                     1: 'dirt'
                     2: 'cov'
@@ -236,7 +225,7 @@ def w3_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
                     6: 'omsk'
                     7: 'art'
         tilepath - directory containing WSSA tiles
-        release  - for now 'dev' or '1.0', '1.0' is default
+        release  - default '1.0', currently only release = '1.0' supported
         large    - set for 8k x 8k tiles, default is 3k x 3k
         mjysr    - set for result in MJy/sr, default is W3 DN
 

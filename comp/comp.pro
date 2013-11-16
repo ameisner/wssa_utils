@@ -109,6 +109,20 @@ pro test_vals_float, outname
 
 end
 
+pro test_vals_mjysr, outname
+
+; test that conversion to MJy/sr doesn't create any problems
+
+  ra  = [228.06533d, 336.88487d,  132.85047d, 296.63675d, 174.24343d, $ 
+          304.68113d]
+  dec = [9.6944888d, 25.149593d, -29.273778d, 11.994469d, 43.651411d, $ 
+         -10.985369d]
+
+  vals = w3_getval(ra, dec, /mjysr)
+  writefits, outname, vals
+
+end
+
 pro test_edge_interp, outname
 
 ; engineer extreme test cases for interpolation near or off of tile edges

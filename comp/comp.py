@@ -99,3 +99,13 @@ def test_vals_rect(outname, fname='rect.fits', exten=0):
 
     vals = wssa_utils.w3_getval(ra, dec, exten=exten)
     arrs2fits(outname, vals)
+
+def test_vals_mjysr(outname):
+    """test that conversion to MJy/sr doesn't create any problems"""
+    ra  = np.array([228.06533, 336.88487,  132.85047, 296.63675, 174.24343,
+                     304.68113])
+    dec = np.array([9.6944888, 25.149593, -29.273778, 11.994469, 43.651411,
+                    -10.985369])
+
+    vals = wssa_utils.w3_getval(ra, dec, mjysr=True)
+    arrs2fits(outname, vals)

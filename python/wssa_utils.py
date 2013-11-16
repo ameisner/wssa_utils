@@ -156,7 +156,7 @@ def uniq(arr):
     u = arr[bdy]
     return u, bdy
 
-def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0',
+def tile_val_interp(tnum, x, y, large=True, exten=0, release='1.0',
                     tpath=tile_par_struc()['tpath'], gz=False):
     """
     Use (x,y) pairs and tile numbers to sample values from WSSA tiles.
@@ -255,7 +255,7 @@ def w3_getval(ra, dec, exten=0, tilepath=tile_par_struc()['tpath'],
     dec = dec.ravel()
 
     tnum, x, y = coord_to_tile(ra, dec, large=large)
-    vals = tile_interp_val(tnum, x, y, exten=exten, tpath=tilepath,
+    vals = tile_val_interp(tnum, x, y, exten=exten, tpath=tilepath,
                            release=release, large=large, gz=gz)
 
     par = tile_par_struc(release=release, large=large)

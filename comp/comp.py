@@ -86,7 +86,7 @@ def test_edge_interp(outname):
     tnum = np.zeros(nsam,dtype='int')+115
     par = wssa_utils.tile_par_struc()
     tpath = par['tpath']
-    vals = wssa_utils.tile_interp_val(tnum, x, y, large=True, release='1.0',
+    vals = wssa_utils.tile_val_interp(tnum, x, y, large=True, release='1.0',
                                       tpath=tpath)
     arrs2fits(outname, vals)
 

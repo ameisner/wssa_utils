@@ -46,6 +46,9 @@
 function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
                     large=large, mjysr=mjysr, gz=gz
 
+  sane = check_coords(ra, dec)
+  if ~sane then return, -1
+
   if ~keyword_set(exten) then exten = 0
 ; ----- make large = 1 (8k x 8k tiles) default
   if n_elements(large) EQ 0 then large = 1

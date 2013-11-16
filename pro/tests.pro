@@ -164,6 +164,8 @@ pro test_bad_lat
 
   vals = w3_getval(ra, dec)
 
+  assert, (vals EQ -1)
+
 end
 
 pro test_ext_type
@@ -257,5 +259,6 @@ pro tests
   test_unit_conversion
   test_ext_type
   test_tilepath
+  test_bad_lat
 
 end

@@ -17,7 +17,7 @@
 ;   tpath - path to location of WSSA tiles
 ;   exten - fits extension, default to exten=0, now implemented for
 ;           single-element exten input
-;   release - for now 'dev' or '1.0', 'dev' is default
+;   release - default '1.0', currently only release = '1.0' is supported
 ;
 ; KEYWORDS:
 ;   large - not yet implemented

@@ -9,7 +9,7 @@
 ;   par = tile_par_struc(large=, w4=)
 ;
 ; OPTIONAL INPUTS:
-;   release - release string, should be either 'dev' or '1.0'
+;   release - default '1.0', currently only release = '1.0' is supported
 ;
 ; KEYWORDS:
 ;   large - set for large version of tiles (8k x 8k), default size is
@@ -30,7 +30,7 @@
 ;----------------------------------------------------------------------
 function tile_par_struc, large=large, w4=w4, release=release
 
-  if ~keyword_set(release) then release = 'dev'
+  if ~keyword_set(release) then release = '1.0'
 ; ----- tile sidelength, degrees
   sidelen = 12.5d
 ; ----- tile sidelength, pixels
@@ -41,26 +41,15 @@ function tile_par_struc, large=large, w4=w4, release=release
   crpix = keyword_set(large) ? 3999.5d : 1499.5d
 ; ----- name of index file with tile centers, etc.
   indexfile = '$WISE_DATA/wisetile-index-allsky.fits'
-; ----- extension names, clean this up later, for now useful to see list
-  if (release EQ 'dev') then $ 
-      extens = ['clean', $ 
-                'dirt',  $ 
-                'cov',   $ 
-                'sfd',   $
-                'min',   $ 
-                'max',   $
-                'amsk',  $ 
-                'omsk',  $ 
-                'art'     ] $
-  else $
-      extens = ['clean', $ 
-                'dirt',  $ 
-                'cov',   $ 
-                'min',   $ 
-                'max',   $
-                'amsk',  $ 
-                'omsk',  $ 
-                'art'     ]
+; ----- tile extension names
+  extens = ['clean', $ 
+            'dirt',  $ 
+            'cov',   $ 
+            'min',   $ 
+            'max',   $
+            'amsk',  $ 
+            'omsk',  $ 
+            'art'     ]
 ; ----- boolean indicating whether each extension should be treated as a
 ;       bit-mask, 0=not mask, 1=mask (what about coverage??)
   ismsk = strpos(extens, 'msk') GT 0

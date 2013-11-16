@@ -194,7 +194,7 @@ def tile_interp_val(tnum, x, y, large=True, exten=0, release='1.0',
         f = os.path.join(tpath, fname[i]) + ('.gz' if gz else '')
 
         print('[' + str(i+1) + '/' + str(nu) + '] Reading: ' + f + ', ' +
-              str(len(xx)) + ' samples')
+              str(len(xx)) + ' sample'+ 's'*int(len(xx) > 1))
 
         xoffs = int(max(np.floor(np.min(xx)), 0))
         yoffs = int(max(np.floor(np.min(yy)), 0))

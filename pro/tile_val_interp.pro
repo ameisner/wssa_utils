@@ -60,7 +60,8 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
       indl = (i EQ 0) ? 0 : bdy[i-1] + 1
       indu = bdy[i]
       print, '['+strtrim(string(i+1), 2) + '/' + strtrim(string(nu), 2)+']', $
-          ' Reading: ', fname[i],', '+strtrim(string(indu-indl+1),2)+' samples'
+          ' Reading: ', fname[i],', '+strtrim(string(indu-indl+1),2)+ $ 
+          ' sample'+(((indu-indl+1) GT 1) ? 's' : '')
       xx = x[sind[indl:indu]]
       yy = y[sind[indl:indu]]
       xoffs = (floor(min(xx)) > 0)

@@ -33,7 +33,7 @@ pro test_single_pair
   coords = random_lonlat(nsam, /deg)
   ra  = coords[0, *]
   dec = coords[1, *]
-  val = w3_getval(ra, dec)
+  val = wssa_getval(ra, dec)
   assert, (n_elements(val) EQ nsam)
   assert, (size(val, /type) EQ 4)
   
@@ -52,7 +52,7 @@ pro test_many_coords
   ra = randomu(seed, nsam) - 0.5 + racen
   dec = randomu(seed, nsam) - 0.5 + deccen
 
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
   assert, (n_elements(vals) EQ nsam)
   assert, (size(vals, /type) EQ 4)
   assert, (n_elements(size(val, /DIM)) EQ 1)
@@ -68,7 +68,7 @@ pro test_many_tiles
   coords = random_lonlat(nsam, /deg)
   ra = coords[0, *]
   dec = coords[1, *]
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
 
   assert, (n_elements(vals) EQ nsam)
   assert, (size(vals, /type) EQ 4)
@@ -82,7 +82,7 @@ pro test_full_sky
 
   nside = 16
   healgen_lb, nside, ra, dec
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
   assert, (size(vals, /type) EQ 4)
   assert, array_equal(size(vals, /DIM), size(ra, /DIM))
@@ -106,7 +106,7 @@ pro test_2d_coords
   ra = reform(ra, sz[0], sz[1])
   dec = reform(dec, sz[0], sz[1])
 
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
   assert, (size(vals, /type) EQ 4)
   assert, array_equal(size(vals, /DIM), sz)
@@ -131,7 +131,7 @@ pro test_2d_many
   ra = reform(ra, sz[0], sz[1])
   dec = reform(dec, sz[0], sz[1])
 
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
   assert, (size(vals, /type) EQ 4)
   assert, array_equal(size(vals, /DIM), sz)
@@ -146,11 +146,11 @@ pro test_bad_lon
   ra  = [-10.d, 370.d]
   dec = [ 45.d,  45.d]
 
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
   assert, (size(vals, /type) EQ 4)
 
-  tru = w3_getval((ra + 360.d) MOD 360, dec)
+  tru = wssa_getval((ra + 360.d) MOD 360, dec)
   assert, (total(abs(tru-vals) GT tol) EQ 0)
 
 end
@@ -162,7 +162,7 @@ pro test_bad_lat
   ra  = [  45.d,  45.d] ; arb
   dec = [-100.d, 100.d]
 
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
 
   assert, (vals EQ -1)
 
@@ -181,7 +181,7 @@ pro test_ext_type
   msk = par.ismsk
   for ext=0, n_elements(msk)-1 do begin
       if ~msk[ext] then continue
-      val = w3_getval(ra, dec, exten=ext)
+      val = wssa_getval(ra, dec, exten=ext)
       assert, (n_elements(val) EQ nsam)
       assert, (size(val, /type) EQ 3) ; long     
   endfor
@@ -195,7 +195,7 @@ pro test_poles
   ra  = [  0.d,  0.d]
   dec = [-90.d, 90.d]
 
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
   assert, (n_elements(vals) EQ n_elements(ra))
   assert, (size(vals, /type) EQ 4)
   assert, (total(~finite(vals)) EQ 0)
@@ -211,8 +211,8 @@ pro test_unit_conversion
 
   ra  = coords[0, *]
   dec = coords[1, *]
-  val = w3_getval(ra, dec)
-  val_mjysr = w3_getval(ra, dec, /mjysr)
+  val = wssa_getval(ra, dec)
+  val_mjysr = wssa_getval(ra, dec, /mjysr)
   
   assert, (n_elements(val_mjysr) EQ nsam)
   assert, (size(val_mjysr, /type) EQ 4)
@@ -239,7 +239,7 @@ pro test_tilepath, tilepath=tilepath
   coords = random_lonlat(nsam, /deg)
   ra  = coords[0, *]
   dec = coords[1, *]
-  val = w3_getval(ra, dec, tilepath=tilepath)
+  val = wssa_getval(ra, dec, tilepath=tilepath)
   assert, (n_elements(val) EQ nsam)
 
 end

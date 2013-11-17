@@ -1,12 +1,12 @@
 ;+
 ; NAME:
-;   w3_getval
+;   wssa_getval
 ;
 ; PURPOSE:
 ;   return WSSA tile values sampled at list of input sky locations
 ;
 ; CALLING SEQUENCE:
-;   vals = w3_getval(ra, dec)
+;   vals = wssa_getval(ra, dec)
 ;
 ; INPUTS:
 ;   ra - input list of RA values, assumed J2000
@@ -43,8 +43,8 @@
 ; REVISION HISTORY:
 ;   2013-Aug-19 - Aaron Meisner
 ;----------------------------------------------------------------------
-function w3_getval, ra, dec, exten=exten, tilepath=tilepath, release=release, $
-                    large=large, mjysr=mjysr, gz=gz
+function wssa_getval, ra, dec, exten=exten, tilepath=tilepath, $
+                      release=release, large=large, mjysr=mjysr, gz=gz
 
   sane = check_coords(ra, dec)
   if ~sane then return, -1

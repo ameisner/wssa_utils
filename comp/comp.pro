@@ -72,7 +72,7 @@ pro test_vals_rect, outname, fname=fname, exten=exten
   ra  = readfits(fname)
   dec = readfits(fname, ex=1)
 
-  vals = w3_getval(ra, dec, exten=exten)
+  vals = wssa_getval(ra, dec, exten=exten)
   writefits,  outname, vals
 
 end
@@ -87,7 +87,7 @@ pro test_val_float, outname
   ra  = float(ra)
   dec = float(dec)
 
-  val = w3_getval(ra, dec)
+  val = wssa_getval(ra, dec)
   writefits, outname, val
 
 end
@@ -104,7 +104,7 @@ pro test_vals_float, outname
   ra  = float(ra)
   dec = float(dec)
 
-  vals = w3_getval(ra, dec)
+  vals = wssa_getval(ra, dec)
   writefits, outname, vals
 
 end
@@ -118,7 +118,7 @@ pro test_vals_mjysr, outname
   dec = [9.6944888d, 25.149593d, -29.273778d, 11.994469d, 43.651411d, $ 
          -10.985369d]
 
-  vals = w3_getval(ra, dec, /mjysr)
+  vals = wssa_getval(ra, dec, /mjysr)
   writefits, outname, vals
 
 end
@@ -126,7 +126,7 @@ end
 pro test_edge_interp, outname
 
 ; engineer extreme test cases for interpolation near or off of tile edges
-; such cases may never actually arise when running w3_getval
+; such cases may never actually arise when running wssa_getval
 
   x = [-0.23647d, -1.0d, -10.5d, 0.d,    1619.25d, 7999.5d, 8000.d, 2893.81d]
   y = [ 4190.14d, -1.0d, -5.5d , 0.d, -0.0952951d, 7999.5d, 8000.d,  8000.5d]

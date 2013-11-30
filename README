@@ -1,0 +1,131 @@
+General
+-----------------------------------------
+We have chosen to release our full-sky WISE 12 micron dust map as a set of 430 
+so-called "WSSA" tiles, each in FITS format. The WSSA tiling is analogous but 
+not identical to that of the IRAS Sky Survey Atlas (ISSA). The ISSA tile 
+centers and orientations are based on B1950 celestial coordinates, whereas 
+WSSA tile astrometry has been precessed to J2000. For instance, ISSA tile 
+centers trace out a series of isolatitude rings in B1950 celestial coordinates,
+while WSSA tile centers trace out a series of isolatitude rings in J2000 
+celestial coordinates. Thus ISSA and WSSA tiles do not cover identical
+astrometric footprints. As stated in the headers/docstrings of the WSSA 
+software tools, input coordinates are expected to be J2000 RA/Dec. Tile 
+extension and mask bit description tables are appended below.
+
+Because the WSSA tile footprints are not mutually exclusive, there exists 
+some freedom in precisely how to interpolate values off of this set of tiles. 
+The WSSA software tools solve this problem by using the HEALPix pixel indices
+corresponding to user-input coordinates to hash from coordinates to WSSA tile 
+number, using a precomputed correspondence between HEALPix indices and tile 
+numbers.
+
+
+Notes
+------------------------------------------
+We have conducted a thorough comparison of the values output by the IDL/Python
+software tools, and verified that both return identical values for identical 
+(RA, Dec) input coordinates. Users who choose to perform their own custom 
+interpolation off of the WSSA tiles may obtain slightly different values.
+
+The WSSA tools assume a full data download (all 430 tiles), and have not
+been tested or optimized for the case of partial download.
+
+
+Software Download
+-----------------------------------------
+After unpacking wssa_utils.tar.gz, you should see the following directory
+structure.
+
+$ tree -d wssa_utils
+wssa_utils
+|-- etc
+|-- pro
+`-- python
+
+wssa_utils/pro contains the IDL WSSA tools. wssa_utils/python contains the
+Python WSSA tools. The wssa_utils/etc subdirectory contains auxiliary files 
+which store the central coordinates of the tiles and a lookup table between 
+HEALPix pixel index and WSSA tile number.
+
+
+Environment
+------------------------------------------
+Both the Python and IDL implementations require that the WISE_TILE environment 
+variable be set to the directory containing the WSSA tiles and that the 
+WISE_DATA environment variable be set to the wssa_utils/etc directory.
+
+
+IDL
+-----------------------------------------
+Include wssa_utils/pro in your IDL_PATH.
+
+IDL> vals = wssa_getval(ra, dec)
+
+ra, dec should be arrays of equal length or single numerical values. See the
+header documentation for further details.
+
+The IDL implementation has been tested with IDL 7.1.1, 8.1, 8.2.2 and IDLUTILS
+v5_4_24.
+
+
+Python
+-----------------------------------------
+Include wssa_utils/python in your PYTHONPATH.
+
+>> from wssa_utils import wssa_getval
+>> vals = wssa_getval(ra, dec)
+
+ra, dec should be numpy arrays. Single numerical values or lists whose elements
+are of numerical type will be automatically converted to numpy arrays. See
+the docstrings for further details.
+
+The Python implementation has been tested with Python 2.7.1, NumPy 1.6.0, 
+SciPy 0.9.0, and PyFITS 2.4.0.
+
+
+Tile Extensions and Mask Bits
+-----------------------------------------
+The wssa_getval exten keyword allows users to sample different tile extensions.
+The available extensions are given below, and the mask bits for the bit-mask
+extensions are also listed.
+
+Meisner & Finkbeiner Table 3
+ --------------------------
+   extension        name             description
+  -----------      ------           -------------
+   0                'clean'          cleaned co-add
+   1                'dirt'           dirty co-add
+   2                'cov'            integer coverage
+   3                'min'            minimum value image
+   4                'max'            maximum value image
+   5                'amsk'           AND bit-mask 
+   6                'omsk'           OR bit-mask
+   7                'art'            transient artifact image
+
+Meisner & Finkbeiner Table 2
+ --------------------------
+   bit             description
+  -----           -------------
+   0               saturated point source core 
+   1               point source ghost 
+   2               bright region of point source profile  
+   3               first latent of point source 
+   4               PSF subtraction residual interpolated over  
+   5               bright region of point source ghost 
+   6               SSO interpolation 
+   7               resolved compact source 
+   8               second latent of point source 
+   9               third latent of point source 
+   10              fourth latent of point source 
+   11              bright SSO ghost 
+   12              bright SSO latent 
+   13              point source diffraction spike 
+   14              saturated pixel not in static mask 
+   15              Moon contamination 
+   16              RC3 optical galaxy
+   17              big object (M31, LMC, SMC) 
+   18              Solar System planet
+   19              reference comparison failure 
+   20              line-like defect 
+   21              low integer frame coverage 
+   22              ecliptic plane

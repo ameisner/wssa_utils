@@ -58,7 +58,7 @@ function tile_par_struc, large=large, w4=w4, release=release
 ; ----- default tile path
   tpath = getenv('WISE_TILE')
 ; ----- conversion from factor from W3 DN to MJy/sr
-  calfac = 0.0163402d
+  calfac = 0.0135172d
 
   par = { sidelen   : sidelen,   $ 
           pix       : pix,       $

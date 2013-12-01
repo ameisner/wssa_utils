@@ -51,7 +51,7 @@ def tile_par_struc(large=True, release='1.0'):
     # default tile path
     tpath  = os.environ['WISE_TILE']
     # conversion from factor from W3 DN to MJy/sr
-    calfac = 0.0163402
+    calfac = 0.0135172
     # data type for intensity and bit-mask outputs, respectively
     dtype  = ['float32', 'int32']
 

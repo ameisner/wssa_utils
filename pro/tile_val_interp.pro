@@ -18,10 +18,10 @@
 ;   exten - fits extension, default to exten=0, now implemented for
 ;           single-element exten input
 ;   release - default '1.0', currently only release = '1.0' is supported
+;   akari - set to either 'WideS' or 'WideL' to read Akari tiles
 ;
 ; KEYWORDS:
 ;   large - not yet implemented
-;   akari - set to read from Akari tiles rather than WISE tiles
 ;
 ; OUTPUTS:
 ;   vals - values interpolated off of tiles

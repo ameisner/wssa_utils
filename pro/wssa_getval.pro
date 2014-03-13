@@ -23,6 +23,7 @@
 ;                5: 'amsk'
 ;                6: 'omsk'
 ;                7: 'art'
+;   akari - set to either 'WideS' or 'WideL' to read Akari tiles
 ;
 ; KEYWORDS:
 ;   tilepath - directory containing WSSA tile fits files
@@ -30,7 +31,6 @@
 ;   large - large = 1 for 8k x 8k tiles, large = 1 is now default,
 ;           specify large = 0 for 3k x 3k
 ;   mjysr - set for result in MJy/sr, default is W3 DN
-;   akari - set to read from Akari tiles rather than WISE tiles
 ;
 ; OUTPUTS:
 ;   vals - values at (ra, dec) interpolated off of WSSA tiles

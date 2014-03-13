@@ -21,6 +21,7 @@
 ;
 ; KEYWORDS:
 ;   large - not yet implemented
+;   akari - set to read from Akari tiles rather than WISE tiles
 ;
 ; OUTPUTS:
 ;   vals - values interpolated off of tiles

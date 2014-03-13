@@ -15,6 +15,7 @@
 ;   large - set for large version of tiles (8k x 8k), default size is
 ;           3k x 3k
 ;   w4 - set for W4 (default W3), not yet implemented
+;   akari - set for Akari tiles
 ;
 ; OUTPUTS:
 ;   par - structure containing tile parameters
@@ -56,7 +57,7 @@ function tile_par_struc, large=large, w4=w4, release=release, akari=akari
 ; ----- number of tiles, don't want random 430's all over my code
   ntile = 430
 ; ----- default tile path
-  tpath = keyword_set(akari) ? getenv('AKARI_TILE')  : getenv('WISE_TILE')
+  tpath = keyword_set(akari) ? getenv('AKARI_TILE') : getenv('WISE_TILE')
 ; ----- conversion from factor from W3 DN to MJy/sr
   calfac = 0.0135172d
 

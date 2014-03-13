@@ -28,7 +28,7 @@
 ; REVISION HISTORY:
 ;   2013-Aug-15 - Aaron Meisner
 ;----------------------------------------------------------------------
-function tile_par_struc, large=large, w4=w4, release=release
+function tile_par_struc, large=large, w4=w4, release=release, akari=akari
 
   if ~keyword_set(release) then release = '1.0'
 ; ----- tile sidelength, degrees
@@ -56,7 +56,7 @@ function tile_par_struc, large=large, w4=w4, release=release
 ; ----- number of tiles, don't want random 430's all over my code
   ntile = 430
 ; ----- default tile path
-  tpath = getenv('WISE_TILE')
+  tpath = keyword_set(akari) ? getenv('AKARI_TILE')  : getenv('WISE_TILE')
 ; ----- conversion from factor from W3 DN to MJy/sr
   calfac = 0.0135172d
 

@@ -44,15 +44,18 @@
 ;   2013-Aug-19 - Aaron Meisner
 ;----------------------------------------------------------------------
 function wssa_getval, ra, dec, exten=exten, tilepath=tilepath, $
-                      release=release, large=large, mjysr=mjysr, gz=gz
+                      release=release, large=large, mjysr=mjysr, gz=gz, $ 
+                      akari=akari
 
   sane = check_coords(ra, dec)
   if ~sane then return, -1
 
-  if ~keyword_set(exten) then exten = 0
-; ----- make large = 1 (8k x 8k tiles) default
-  if n_elements(large) EQ 0 then large = 1
-  if ~keyword_set(release) then release = '1.0'
+  if ~keyword_set(exten) OR keyword_set(akari) then exten = 0
+; ----- make large = 1 (8k x 8k tiles) default for WISE, 
+;            large = 0 (3k x 3k tiles) default for Akari
+  if n_elements(large) EQ 0 then large = (keyword_set(akari) ? 0 : 1)
+; ----- dummy value for Akari release
+  if ~keyword_set(release) then release = (keyword_set(akari) ? '' : '1.0')
 
   exten = string_to_ext(exten, release=release)
 
@@ -61,15 +64,16 @@ function wssa_getval, ra, dec, exten=exten, tilepath=tilepath, $
 
   coord_to_tile, ra, dec, tnum, x=x, y=y, large=large
   vals = tile_val_interp(tnum, x, y, exten=exten, tpath=tilepath, $ 
-      release=release, large=large, gz=gz)
+      release=release, large=large, gz=gz, akari=akari)
 
   if n_elements(vals) GT 1 then vals = reform(vals, size(ra, /dim))
 
   par = tile_par_struc(release=release, large=large)
-  mask = (par.ismsk)[exten]
+  mask = (keyword_set(akari) ? 0 : (par.ismsk)[exten])
 
   if mask then vals = long(vals)
-  if keyword_set(mjysr) AND (~mask) then vals *= float(par.calfac)
+  if keyword_set(mjysr) AND (~mask) AND ~keyword_set(akari) then $ 
+      vals *= float(par.calfac)
 
   return, vals
 

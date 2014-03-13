@@ -37,13 +37,13 @@
 ;   2013-Aug-18 - Aaron Meisner
 ;----------------------------------------------------------------------
 function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $ 
-                          release=release, gz=gz
+                          release=release, gz=gz, akari=akari
 
   if ~keyword_set(exten) then exten = 0
 ; ----- make sure exten is an integer, do some checks on exten
   exten = string_to_ext(exten, release=release)
 
-  par = tile_par_struc(large=large)
+  par = tile_par_struc(large=large, akari=akari)
   if ~keyword_set(tpath) then tpath = par.tpath
 
   nval = n_elements(tnum)
@@ -51,8 +51,14 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
   bdy = uniq(tnum[sind])
 ; ----- number of unique tiles
   nu = n_elements(bdy)
-  fname = concat_dir(tpath, $ 
-      'wise_' + string(tnum[sind[bdy]], format='(I03)') + '.fits')
+  if ~keyword_set(akari) then begin
+      fname = concat_dir(tpath, $ 
+          'wise_' + string(tnum[sind[bdy]], format='(I03)') + '.fits')
+  endif else begin
+      fname = concat_dir(tpath, $ 
+          string(tnum[sind[bdy]], format='(I03)') + '_WideS.fits')
+  endelse
+
   if keyword_set(gz) then fname += '.gz'
 
   vals = fltarr(nval)

@@ -52,8 +52,9 @@ Environment
 ------------------------------------------
 Both the Python and IDL implementations require that the WISE_TILE environment 
 variable be set to the directory containing the WSSA tiles and that the 
-WISE_DATA environment variable be set to the wssa_utils/etc directory.
-
+WISE_DATA environment variable be set to the wssa_utils/etc directory. If you
+intend to use the wssa_getval "akari" keyword, you can set the AKARI_TILE 
+environment variable to specify the default Akari tile location.
 
 IDL
 -----------------------------------------

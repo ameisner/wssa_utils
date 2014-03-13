@@ -44,7 +44,7 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
 ; ----- make sure exten is an integer, do some checks on exten
   exten = string_to_ext(exten, release=release)
 
-  par = tile_par_struc(large=large, akari=akari)
+  par = tile_par_struc(large=large, akari=keyword_set(akari))
   if ~keyword_set(tpath) then tpath = par.tpath
 
   nval = n_elements(tnum)
@@ -56,8 +56,9 @@ function tile_val_interp, tnum, x, y, large=large, exten=exten, tpath=tpath, $
       fname = concat_dir(tpath, $ 
           'wise_' + string(tnum[sind[bdy]], format='(I03)') + '.fits')
   endif else begin
+      tpath = concat_dir(tpath, akari)
       fname = concat_dir(tpath, $ 
-          string(tnum[sind[bdy]], format='(I03)') + '_WideS.fits')
+          string(tnum[sind[bdy]], format='(I03)') + '_' + akari + '.fits')
   endelse
 
   if keyword_set(gz) then fname += '.gz'
